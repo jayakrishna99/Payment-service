@@ -106,8 +106,6 @@ public class ProfileServiceImpl implements ProfileService {
         log.info("Updating profile: {} for merchant: {}", profileId, merchantId);
         
         return profileRepository.findByProfileIdAndMerchantId(profileId, merchantId)
-            .switchIfEmpty(Mono.just(Result.<ProfileResponse, PaymentError>err(
-                PaymentError.of("PROFILE_NOT_FOUND", "Profile not found: " + profileId))))
             .flatMap(entity -> {
                 if (request.getProfileName() != null) {
                     entity.setProfileName(request.getProfileName());
@@ -145,6 +143,8 @@ public class ProfileServiceImpl implements ProfileService {
                     .map(this::toProfileResponse)
                     .map(Result::<ProfileResponse, PaymentError>ok);
             })
+            .switchIfEmpty(Mono.just(Result.<ProfileResponse, PaymentError>err(
+                PaymentError.of("PROFILE_NOT_FOUND", "Profile not found: " + profileId))))
             .onErrorResume(error -> {
                 log.error("Error updating profile: {}", error.getMessage(), error);
                 return Mono.just(Result.err(PaymentError.of("PROFILE_UPDATE_FAILED",
@@ -156,7 +156,7 @@ public class ProfileServiceImpl implements ProfileService {
     public Mono<Result<Flux<ProfileResponse>, PaymentError>> listProfiles(String merchantId) {
         log.info("Listing profiles for merchant: {}", merchantId);
         
-        return Mono.just(Result.ok(profileRepository.findByMerchantId(merchantId)
+        return Mono.just(Result.<Flux<ProfileResponse>, PaymentError>ok(profileRepository.findByMerchantId(merchantId)
             .map(this::toProfileResponse)))
             .onErrorResume(error -> {
                 log.error("Error listing profiles: {}", error.getMessage(), error);
@@ -173,10 +173,10 @@ public class ProfileServiceImpl implements ProfileService {
         log.info("Deleting profile: {} for merchant: {}", profileId, merchantId);
         
         return profileRepository.findByProfileIdAndMerchantId(profileId, merchantId)
-            .switchIfEmpty(Mono.just(Result.<Void, PaymentError>err(
-                PaymentError.of("PROFILE_NOT_FOUND", "Profile not found: " + profileId))))
             .flatMap(entity -> profileRepository.delete(entity)
                 .thenReturn(Result.<Void, PaymentError>ok(null)))
+            .switchIfEmpty(Mono.just(Result.<Void, PaymentError>err(
+                PaymentError.of("PROFILE_NOT_FOUND", "Profile not found: " + profileId))))
             .onErrorResume(error -> {
                 log.error("Error deleting profile: {}", error.getMessage(), error);
                 return Mono.just(Result.err(PaymentError.of("PROFILE_DELETE_FAILED",
@@ -192,8 +192,6 @@ public class ProfileServiceImpl implements ProfileService {
         log.info("Toggling extended card info for profile: {} merchant: {}", profileId, merchantId);
         
         return profileRepository.findByProfileIdAndMerchantId(profileId, merchantId)
-            .switchIfEmpty(Mono.just(Result.<ProfileResponse, PaymentError>err(
-                PaymentError.of("PROFILE_NOT_FOUND", "Profile not found: " + profileId))))
             .flatMap(entity -> {
                 entity.setIsExtendedCardInfoEnabled(
                     entity.getIsExtendedCardInfoEnabled() == null || !entity.getIsExtendedCardInfoEnabled());
@@ -202,6 +200,8 @@ public class ProfileServiceImpl implements ProfileService {
                     .map(this::toProfileResponse)
                     .map(Result::<ProfileResponse, PaymentError>ok);
             })
+            .switchIfEmpty(Mono.just(Result.<ProfileResponse, PaymentError>err(
+                PaymentError.of("PROFILE_NOT_FOUND", "Profile not found: " + profileId))))
             .onErrorResume(error -> {
                 log.error("Error toggling extended card info: {}", error.getMessage(), error);
                 return Mono.just(Result.err(PaymentError.of("PROFILE_UPDATE_FAILED",
@@ -217,8 +217,6 @@ public class ProfileServiceImpl implements ProfileService {
         log.info("Toggling connector agnostic MIT for profile: {} merchant: {}", profileId, merchantId);
         
         return profileRepository.findByProfileIdAndMerchantId(profileId, merchantId)
-            .switchIfEmpty(Mono.just(Result.<ProfileResponse, PaymentError>err(
-                PaymentError.of("PROFILE_NOT_FOUND", "Profile not found: " + profileId))))
             .flatMap(entity -> {
                 entity.setIsConnectorAgnosticMitEnabled(
                     entity.getIsConnectorAgnosticMitEnabled() == null || !entity.getIsConnectorAgnosticMitEnabled());
@@ -227,6 +225,8 @@ public class ProfileServiceImpl implements ProfileService {
                     .map(this::toProfileResponse)
                     .map(Result::<ProfileResponse, PaymentError>ok);
             })
+            .switchIfEmpty(Mono.just(Result.<ProfileResponse, PaymentError>err(
+                PaymentError.of("PROFILE_NOT_FOUND", "Profile not found: " + profileId))))
             .onErrorResume(error -> {
                 log.error("Error toggling connector agnostic MIT: {}", error.getMessage(), error);
                 return Mono.just(Result.err(PaymentError.of("PROFILE_UPDATE_FAILED",
@@ -265,8 +265,6 @@ public class ProfileServiceImpl implements ProfileService {
         log.info("Updating fallback routing for profile: {} merchant: {}", profileId, merchantId);
         
         return profileRepository.findByProfileIdAndMerchantId(profileId, merchantId)
-            .switchIfEmpty(Mono.just(Result.<Map<String, Object>, PaymentError>err(
-                PaymentError.of("PROFILE_NOT_FOUND", "Profile not found: " + profileId))))
             .flatMap(entity -> {
                 entity.setDefaultFallbackRouting(fallbackRouting);
                 entity.setModifiedAt(Instant.now());
@@ -274,6 +272,8 @@ public class ProfileServiceImpl implements ProfileService {
                     .map(e -> Result.<Map<String, Object>, PaymentError>ok(
                         e.getDefaultFallbackRouting() != null ? e.getDefaultFallbackRouting() : Map.of()));
             })
+            .switchIfEmpty(Mono.just(Result.<Map<String, Object>, PaymentError>err(
+                PaymentError.of("PROFILE_NOT_FOUND", "Profile not found: " + profileId))))
             .onErrorResume(error -> {
                 log.error("Error updating fallback routing: {}", error.getMessage(), error);
                 return Mono.just(Result.err(PaymentError.of("ROUTING_UPDATE_FAILED",
@@ -291,8 +291,6 @@ public class ProfileServiceImpl implements ProfileService {
                 algorithmId, profileId, merchantId);
         
         return profileRepository.findByProfileIdAndMerchantId(profileId, merchantId)
-            .switchIfEmpty(Mono.just(Result.<ProfileResponse, PaymentError>err(
-                PaymentError.of("PROFILE_NOT_FOUND", "Profile not found: " + profileId))))
             .flatMap(entity -> {
                 entity.setRoutingAlgorithmId(algorithmId);
                 entity.setModifiedAt(Instant.now());
@@ -300,6 +298,8 @@ public class ProfileServiceImpl implements ProfileService {
                     .map(this::toProfileResponse)
                     .map(Result::<ProfileResponse, PaymentError>ok);
             })
+            .switchIfEmpty(Mono.just(Result.<ProfileResponse, PaymentError>err(
+                PaymentError.of("PROFILE_NOT_FOUND", "Profile not found: " + profileId))))
             .onErrorResume(error -> {
                 log.error("Error activating routing algorithm: {}", error.getMessage(), error);
                 return Mono.just(Result.err(PaymentError.of("ROUTING_ACTIVATION_FAILED",
@@ -315,8 +315,6 @@ public class ProfileServiceImpl implements ProfileService {
         log.info("Deactivating routing algorithm for profile: {} merchant: {}", profileId, merchantId);
         
         return profileRepository.findByProfileIdAndMerchantId(profileId, merchantId)
-            .switchIfEmpty(Mono.just(Result.<ProfileResponse, PaymentError>err(
-                PaymentError.of("PROFILE_NOT_FOUND", "Profile not found: " + profileId))))
             .flatMap(entity -> {
                 entity.setRoutingAlgorithmId(null);
                 entity.setModifiedAt(Instant.now());
@@ -324,6 +322,8 @@ public class ProfileServiceImpl implements ProfileService {
                     .map(this::toProfileResponse)
                     .map(Result::<ProfileResponse, PaymentError>ok);
             })
+            .switchIfEmpty(Mono.just(Result.<ProfileResponse, PaymentError>err(
+                PaymentError.of("PROFILE_NOT_FOUND", "Profile not found: " + profileId))))
             .onErrorResume(error -> {
                 log.error("Error deactivating routing algorithm: {}", error.getMessage(), error);
                 return Mono.just(Result.err(PaymentError.of("ROUTING_DEACTIVATION_FAILED",
@@ -364,8 +364,6 @@ public class ProfileServiceImpl implements ProfileService {
         // TODO: In production, integrate with decision manager service
         // For now, store in profile metadata
         return profileRepository.findByProfileIdAndMerchantId(profileId, merchantId)
-            .switchIfEmpty(Mono.just(Result.<Map<String, Object>, PaymentError>err(
-                PaymentError.of("PROFILE_NOT_FOUND", "Profile not found: " + profileId))))
             .flatMap(entity -> {
                 Map<String, Object> metadata = entity.getMetadata();
                 if (metadata == null) {
@@ -377,6 +375,8 @@ public class ProfileServiceImpl implements ProfileService {
                 return profileRepository.save(entity)
                     .map(e -> Result.<Map<String, Object>, PaymentError>ok(decisionConfig));
             })
+            .switchIfEmpty(Mono.just(Result.<Map<String, Object>, PaymentError>err(
+                PaymentError.of("PROFILE_NOT_FOUND", "Profile not found: " + profileId))))
             .onErrorResume(error -> {
                 log.error("Error upserting decision manager config: {}", error.getMessage(), error);
                 return Mono.just(Result.err(PaymentError.of("DECISION_CONFIG_UPDATE_FAILED",

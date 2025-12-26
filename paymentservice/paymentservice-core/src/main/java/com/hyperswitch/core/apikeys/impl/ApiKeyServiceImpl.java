@@ -85,7 +85,7 @@ public class ApiKeyServiceImpl implements ApiKeyService {
     public Mono<Result<Flux<ApiKeyResponse>, PaymentError>> listApiKeys(String merchantId) {
         log.info("Listing API keys for merchant: {}", merchantId);
         
-        return Mono.just(Result.ok(apiKeyRepository.findByMerchantId(merchantId)
+        return Mono.just(Result.<Flux<ApiKeyResponse>, PaymentError>ok(apiKeyRepository.findByMerchantId(merchantId)
             .map(this::toApiKeyResponse)))
             .onErrorResume(error -> {
                 log.error("Error listing API keys: {}", error.getMessage(), error);
@@ -122,8 +122,6 @@ public class ApiKeyServiceImpl implements ApiKeyService {
         log.info("Updating API key: {} for merchant: {}", keyId, merchantId);
         
         return apiKeyRepository.findByKeyIdAndMerchantId(keyId, merchantId)
-            .switchIfEmpty(Mono.just(Result.<ApiKeyResponse, PaymentError>err(
-                PaymentError.of("API_KEY_NOT_FOUND", "API key not found: " + keyId))))
             .flatMap(entity -> {
                 if (request.getName() != null) {
                     entity.setName(request.getName());
@@ -139,6 +137,8 @@ public class ApiKeyServiceImpl implements ApiKeyService {
                     .map(this::toApiKeyResponse)
                     .map(Result::<ApiKeyResponse, PaymentError>ok);
             })
+            .switchIfEmpty(Mono.just(Result.<ApiKeyResponse, PaymentError>err(
+                PaymentError.of("API_KEY_NOT_FOUND", "API key not found: " + keyId))))
             .onErrorResume(error -> {
                 log.error("Error updating API key: {}", error.getMessage(), error);
                 return Mono.just(Result.err(PaymentError.of("API_KEY_UPDATE_FAILED",
@@ -154,10 +154,10 @@ public class ApiKeyServiceImpl implements ApiKeyService {
         log.info("Revoking API key: {} for merchant: {}", keyId, merchantId);
         
         return apiKeyRepository.findByKeyIdAndMerchantId(keyId, merchantId)
-            .switchIfEmpty(Mono.just(Result.<Void, PaymentError>err(
-                PaymentError.of("API_KEY_NOT_FOUND", "API key not found: " + keyId))))
             .flatMap(entity -> apiKeyRepository.delete(entity)
                 .thenReturn(Result.<Void, PaymentError>ok(null)))
+            .switchIfEmpty(Mono.just(Result.<Void, PaymentError>err(
+                PaymentError.of("API_KEY_NOT_FOUND", "API key not found: " + keyId))))
             .onErrorResume(error -> {
                 log.error("Error revoking API key: {}", error.getMessage(), error);
                 return Mono.just(Result.err(PaymentError.of("API_KEY_REVOKE_FAILED",
