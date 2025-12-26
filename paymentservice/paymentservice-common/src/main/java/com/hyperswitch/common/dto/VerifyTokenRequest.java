@@ -1,0 +1,22 @@
+package com.hyperswitch.common.dto;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+/**
+ * Request DTO for token verification
+ */
+public class VerifyTokenRequest {
+    
+    @JsonProperty("token")
+    private String token;
+    
+    // Getters and Setters
+    public String getToken() {
+        return token;
+    }
+    
+    public void setToken(String token) {
+        this.token = token;
+    }
+}
+
