@@ -1,0 +1,245 @@
+package com.hyperswitch.web.controller;
+
+import com.hyperswitch.common.dto.CustomerRequest;
+import com.hyperswitch.common.dto.CustomerResponse;
+import com.hyperswitch.web.controller.PaymentException;
+import com.hyperswitch.common.types.CustomerId;
+import com.hyperswitch.common.types.MerchantId;
+import com.hyperswitch.core.customers.CustomerService;
+import com.hyperswitch.core.mandates.MandateService;
+import com.hyperswitch.core.paymentmethods.PaymentMethodService;
+import com.hyperswitch.common.dto.PaymentMethodResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+/**
+ * REST controller for customer management
+ */
+@RestController
+@RequestMapping("/api/customers")
+public class CustomerController {
+
+    private final CustomerService customerService;
+    private final MandateService mandateService;
+    private final PaymentMethodService paymentMethodService;
+
+    @Autowired
+    public CustomerController(CustomerService customerService, MandateService mandateService, PaymentMethodService paymentMethodService) {
+        this.customerService = customerService;
+        this.mandateService = mandateService;
+        this.paymentMethodService = paymentMethodService;
+    }
+
+    /**
+     * Create a new customer
+     * POST /api/customers
+     */
+    @PostMapping
+    public Mono<ResponseEntity<CustomerResponse>> createCustomer(@RequestBody CustomerRequest request) {
+        return customerService.createCustomer(request)
+            .map(result -> {
+                if (result.isOk()) {
+                    return ResponseEntity.status(HttpStatus.CREATED).body(result.unwrap());
+                } else {
+                    throw new PaymentException(result.unwrapErr());
+                }
+            });
+    }
+
+    /**
+     * Get customer by ID
+     * GET /api/customers/{id}
+     */
+    @GetMapping("/{id}")
+    public Mono<ResponseEntity<CustomerResponse>> getCustomer(@PathVariable String id) {
+        CustomerId customerId = CustomerId.of(id);
+        return customerService.getCustomer(customerId)
+            .map(result -> {
+                if (result.isOk()) {
+                    return ResponseEntity.ok(result.unwrap());
+                } else {
+                    throw new PaymentException(result.unwrapErr());
+                }
+            });
+    }
+
+    /**
+     * Update customer
+     * POST /api/customers/{id}
+     */
+    @PostMapping("/{id}")
+    public Mono<ResponseEntity<CustomerResponse>> updateCustomer(
+            @PathVariable String id,
+            @RequestBody CustomerRequest request) {
+        CustomerId customerId = CustomerId.of(id);
+        return customerService.updateCustomer(customerId, request)
+            .map(result -> {
+                if (result.isOk()) {
+                    return ResponseEntity.ok(result.unwrap());
+                } else {
+                    throw new PaymentException(result.unwrapErr());
+                }
+            });
+    }
+
+    /**
+     * Delete customer
+     * DELETE /api/customers/{id}
+     */
+    @DeleteMapping("/{id}")
+    public Mono<ResponseEntity<Void>> deleteCustomer(@PathVariable String id) {
+        CustomerId customerId = CustomerId.of(id);
+        return customerService.deleteCustomer(customerId)
+            .map(result -> {
+                if (result.isOk()) {
+                    return ResponseEntity.noContent().build();
+                } else {
+                    throw new PaymentException(result.unwrapErr());
+                }
+            });
+    }
+
+    /**
+     * List customers for a merchant
+     * GET /api/customers?merchant_id={merchantId}&page={page}&size={size}
+     */
+    @GetMapping
+    public Mono<ResponseEntity<Flux<CustomerResponse>>> listCustomers(
+            @RequestParam("merchant_id") String merchantIdParam,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+        MerchantId merchantId = MerchantId.of(merchantIdParam);
+        Pageable pageable = PageRequest.of(page, size);
+        
+        return customerService.listCustomers(merchantId, pageable)
+            .map(result -> {
+                if (result.isOk()) {
+                    return ResponseEntity.ok(result.unwrap());
+                } else {
+                    throw new PaymentException(result.unwrapErr());
+                }
+            });
+    }
+    
+    /**
+     * List customers with count
+     * GET /api/customers/list_with_count
+     */
+    @GetMapping("/list_with_count")
+    public Mono<ResponseEntity<com.hyperswitch.common.dto.CustomerListWithCountResponse>> listCustomersWithCount(
+            @RequestParam("merchant_id") String merchantIdParam,
+            @RequestParam(defaultValue = "100") Integer limit,
+            @RequestParam(defaultValue = "0") Integer offset) {
+        MerchantId merchantId = MerchantId.of(merchantIdParam);
+        return customerService.listCustomersWithCount(merchantId, limit, offset)
+            .map(result -> {
+                if (result.isOk()) {
+                    return ResponseEntity.ok(result.unwrap());
+                } else {
+                    throw new PaymentException(result.unwrapErr());
+                }
+            });
+    }
+    
+    /**
+     * Get total payment method count for a merchant
+     * GET /api/customers/total-payment-methods
+     */
+    @GetMapping("/total-payment-methods")
+    public Mono<ResponseEntity<Long>> getTotalPaymentMethodCount(
+            @RequestParam("merchant_id") String merchantIdParam) {
+        MerchantId merchantId = MerchantId.of(merchantIdParam);
+        return customerService.getTotalPaymentMethodCount(merchantId)
+            .map(result -> {
+                if (result.isOk()) {
+                    return ResponseEntity.ok(result.unwrap());
+                } else {
+                    throw new PaymentException(result.unwrapErr());
+                }
+            });
+    }
+    
+    /**
+     * List mandates for a customer
+     * GET /api/customers/{id}/mandates
+     */
+    @GetMapping("/{id}/mandates")
+    public Flux<com.hyperswitch.common.dto.MandateResponse> getCustomerMandates(
+            @PathVariable String id) {
+        return mandateService.listCustomerMandates(id);
+    }
+    
+    /**
+     * List customer saved payment methods (v2 API)
+     * GET /api/v2/customers/{customer_id}/saved-payment-methods
+     */
+    @GetMapping("/v2/customers/{customer_id}/saved-payment-methods")
+    @Operation(
+        summary = "List customer saved payment methods (v2)",
+        description = "List the payment methods saved for a customer using v2 API"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Payment methods retrieved successfully"
+        ),
+        @ApiResponse(
+            responseCode = "404",
+            description = "Customer not found"
+        )
+    })
+    public Mono<ResponseEntity<Flux<PaymentMethodResponse>>> listCustomerSavedPaymentMethodsV2(
+            @RequestHeader("X-Merchant-Id") String merchantId,
+            @Parameter(description = "The unique identifier for the customer", required = true)
+            @PathVariable("customer_id") String customerId) {
+        return paymentMethodService.listCustomerPaymentMethods(com.hyperswitch.common.types.CustomerId.of(customerId))
+            .map(result -> {
+                if (result.isOk()) {
+                    return ResponseEntity.ok(result.unwrap());
+                } else {
+                    throw new PaymentException(result.unwrapErr());
+                }
+            });
+    }
+    
+    /**
+     * Get total payment method count (v2 API)
+     * GET /api/v2/customers/total-payment-methods
+     */
+    @GetMapping("/v2/customers/total-payment-methods")
+    @Operation(
+        summary = "Get total payment method count (v2)",
+        description = "Get total count of payment methods for a merchant using v2 API"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Total payment method count retrieved successfully"
+        )
+    })
+    public Mono<ResponseEntity<Long>> getTotalPaymentMethodCountV2(
+            @RequestHeader("X-Merchant-Id") String merchantId) {
+        return customerService.getTotalPaymentMethodCount(com.hyperswitch.common.types.MerchantId.of(merchantId))
+            .map(result -> {
+                if (result.isOk()) {
+                    return ResponseEntity.ok(result.unwrap());
+                } else {
+                    throw new PaymentException(result.unwrapErr());
+                }
+            });
+    }
+}
+

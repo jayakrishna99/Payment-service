@@ -1,0 +1,114 @@
+spring:
+  application:
+    name: hyperswitch-payment-service
+  
+  # Reactive Database Configuration (PostgreSQL)
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/hyperswitch_db
+    username: db_user
+    password: db_pass
+    pool:
+      initial-size: 5
+      max-size: 20
+      max-idle-time: 30m
+      max-acquire-time: 30s
+      max-create-connection-time: 30s
+
+  # Redis Configuration
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: 
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 20
+          max-idle: 10
+          min-idle: 5
+
+  # WebFlux Configuration
+  webflux:
+    base-path: /api
+
+server:
+  port: 8080
+  error:
+    include-message: always
+    include-binding-errors: always
+
+# Management endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus,httptrace
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+      percentiles:
+        http.server.requests: 0.5, 0.9, 0.95, 0.99
+    tags:
+      application: ${spring.application.name}
+      environment: ${spring.profiles.active:default}
+  tracing:
+    sampling:
+      probability: 1.0
+  otlp:
+    tracing:
+      endpoint: ${OTEL_EXPORTER_OTLP_ENDPOINT:http://localhost:4317}
+
+# Logging
+logging:
+  level:
+    root: INFO
+    com.hyperswitch: DEBUG
+    org.springframework.data.r2dbc: INFO
+    org.springframework.web: INFO
+  config: classpath:logback-spring.xml
+
+# OpenAPI/Swagger Configuration
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+    operations-sorter: method
+    tags-sorter: alpha
+    try-it-out-enabled: true
+
+# Application specific configuration
+hyperswitch:
+  payment:
+    max-retry-attempts: 3
+    retry-delay-seconds: 5
+  routing:
+    enabled: true
+    algorithm: SUCCESS_RATE_BASED
+  scheduler:
+    producer:
+      batch-size: 50
+      loop-interval-ms: 30000
+    consumer:
+      loop-interval-ms: 30000
+      consumer-group: scheduler_group
+  connectors:
+    webhooks:
+      stripe:
+        secret: ${STRIPE_WEBHOOK_SECRET:whsec_default_secret}
+      adyen:
+        secret: ${ADYEN_WEBHOOK_SECRET:}
+      checkout:
+        secret: ${CHECKOUT_WEBHOOK_SECRET:}
+

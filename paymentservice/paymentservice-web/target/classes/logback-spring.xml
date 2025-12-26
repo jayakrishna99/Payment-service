@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    
+    <!-- Console Appender with JSON format for structured logging -->
+    <appender name="CONSOLE_JSON" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <timestamp>
+                    <timeZone>UTC</timeZone>
+                </timestamp>
+                <version/>
+                <logLevel/>
+                <message/>
+                <mdc/>
+                <stackTrace/>
+                <loggerName/>
+                <pattern>
+                    <pattern>
+                        {
+                            "service": "hyperswitch-payment-service",
+                            "thread": "%thread",
+                            "logger": "%logger{36}"
+                        }
+                    </pattern>
+                </pattern>
+            </providers>
+        </encoder>
+    </appender>
+
+    <!-- Console Appender with pattern format (fallback) -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{correlationId}] %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- File Appender with JSON format -->
+    <appender name="FILE_JSON" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/payment-service.json</file>
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <timestamp>
+                    <timeZone>UTC</timeZone>
+                </timestamp>
+                <version/>
+                <logLevel/>
+                <message/>
+                <mdc/>
+                <stackTrace/>
+                <loggerName/>
+                <pattern>
+                    <pattern>
+                        {
+                            "service": "hyperswitch-payment-service",
+                            "thread": "%thread",
+                            "logger": "%logger{36}"
+                        }
+                    </pattern>
+                </pattern>
+            </providers>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/payment-service-%d{yyyy-MM-dd}.json.gz</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>10GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <!-- Use JSON logging in production, pattern in development -->
+    <springProfile name="!prod">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="prod">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE_JSON"/>
+            <appender-ref ref="FILE_JSON"/>
+        </root>
+    </springProfile>
+
+    <!-- Application specific loggers -->
+    <logger name="com.hyperswitch" level="DEBUG"/>
+    <logger name="org.springframework.data.r2dbc" level="INFO"/>
+    <logger name="org.springframework.web" level="INFO"/>
+    <logger name="io.netty" level="WARN"/>
+</configuration>
+

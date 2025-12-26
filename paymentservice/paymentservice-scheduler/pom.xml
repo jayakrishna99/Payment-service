@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.hyperswitch</groupId>
+        <artifactId>paymentservice</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>paymentservice-scheduler</artifactId>
+    <name>Payment Service Scheduler</name>
+    <description>Background job processing with producer/consumer pattern</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.hyperswitch</groupId>
+            <artifactId>paymentservice-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.hyperswitch</groupId>
+            <artifactId>paymentservice-storage</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.hyperswitch</groupId>
+            <artifactId>paymentservice-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.hyperswitch</groupId>
+            <artifactId>paymentservice-connectors</artifactId>
+        </dependency>
+
+        <!-- Spring Scheduler -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+
+        <!-- Redis for job queues -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis-reactive</artifactId>
+        </dependency>
+
+    </dependencies>
+
+</project>
