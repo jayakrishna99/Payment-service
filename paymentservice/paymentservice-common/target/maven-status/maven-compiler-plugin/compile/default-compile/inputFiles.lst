@@ -4,6 +4,8 @@ C:\Users\Satish\Desktop\juspay\Payment-service\paymentservice\paymentservice-com
 C:\Users\Satish\Desktop\juspay\Payment-service\paymentservice\paymentservice-common\src\main\java\com\hyperswitch\common\dto\AmountDetailsResponse.java
 C:\Users\Satish\Desktop\juspay\Payment-service\paymentservice\paymentservice-common\src\main\java\com\hyperswitch\common\dto\AmountDetailsUpdate.java
 C:\Users\Satish\Desktop\juspay\Payment-service\paymentservice\paymentservice-common\src\main\java\com\hyperswitch\common\dto\AmountFilter.java
+C:\Users\Satish\Desktop\juspay\Payment-service\paymentservice\paymentservice-common\src\main\java\com\hyperswitch\common\dto\ApiKeyRequest.java
+C:\Users\Satish\Desktop\juspay\Payment-service\paymentservice\paymentservice-common\src\main\java\com\hyperswitch\common\dto\ApiKeyResponse.java
 C:\Users\Satish\Desktop\juspay\Payment-service\paymentservice\paymentservice-common\src\main\java\com\hyperswitch\common\dto\ApplePayMerchantResponse.java
 C:\Users\Satish\Desktop\juspay\Payment-service\paymentservice\paymentservice-common\src\main\java\com\hyperswitch\common\dto\ApplePayMerchantVerificationRequest.java
 C:\Users\Satish\Desktop\juspay\Payment-service\paymentservice\paymentservice-common\src\main\java\com\hyperswitch\common\dto\ApplePayVerifiedDomainsResponse.java
@@ -119,6 +121,8 @@ C:\Users\Satish\Desktop\juspay\Payment-service\paymentservice\paymentservice-com
 C:\Users\Satish\Desktop\juspay\Payment-service\paymentservice\paymentservice-common\src\main\java\com\hyperswitch\common\dto\PayoutRequest.java
 C:\Users\Satish\Desktop\juspay\Payment-service\paymentservice\paymentservice-common\src\main\java\com\hyperswitch\common\dto\PayoutResponse.java
 C:\Users\Satish\Desktop\juspay\Payment-service\paymentservice\paymentservice-common\src\main\java\com\hyperswitch\common\dto\PollResponse.java
+C:\Users\Satish\Desktop\juspay\Payment-service\paymentservice\paymentservice-common\src\main\java\com\hyperswitch\common\dto\ProfileRequest.java
+C:\Users\Satish\Desktop\juspay\Payment-service\paymentservice\paymentservice-common\src\main\java\com\hyperswitch\common\dto\ProfileResponse.java
 C:\Users\Satish\Desktop\juspay\Payment-service\paymentservice\paymentservice-common\src\main\java\com\hyperswitch\common\dto\ReconciliationReportResponse.java
 C:\Users\Satish\Desktop\juspay\Payment-service\paymentservice\paymentservice-common\src\main\java\com\hyperswitch\common\dto\ReconciliationRequest.java
 C:\Users\Satish\Desktop\juspay\Payment-service\paymentservice\paymentservice-common\src\main\java\com\hyperswitch\common\dto\ReconciliationResponse.java

@@ -65,6 +65,7 @@ com\hyperswitch\common\types\AuthenticationLifecycleStatus.class
 com\hyperswitch\common\dto\PayoutListResponse.class
 com\hyperswitch\common\types\DecoupledAuthenticationType.class
 com\hyperswitch\common\dto\DeleteTokenDataRequest.class
+com\hyperswitch\common\dto\ApiKeyResponse.class
 com\hyperswitch\common\types\PaymentLinkId.class
 com\hyperswitch\common\types\PollStatus.class
 com\hyperswitch\common\types\RevenueRecoveryAlgorithmType.class
@@ -111,6 +112,7 @@ com\hyperswitch\common\dto\Order$SortOn.class
 com\hyperswitch\common\dto\ReconciliationReportResponse.class
 com\hyperswitch\common\dto\AmountDetails.class
 com\hyperswitch\common\dto\PayoutResponse.class
+com\hyperswitch\common\dto\ProfileRequest.class
 com\hyperswitch\common\dto\PaymentMethodResponse.class
 com\hyperswitch\common\dto\Customer.class
 com\hyperswitch\common\errors\ErrorClassification.class
@@ -144,6 +146,7 @@ com\hyperswitch\common\dto\PaymentMethodAuthExchangeResponse.class
 com\hyperswitch\common\types\PayoutId.class
 com\hyperswitch\common\dto\CustomerRequest$Builder.class
 com\hyperswitch\common\dto\PaymentMethodBatchMigrateRequest.class
+com\hyperswitch\common\dto\ApiKeyRequest.class
 com\hyperswitch\common\dto\PaymentsSessionRequest.class
 com\hyperswitch\common\dto\AuthenticationAuthenticateResponse.class
 com\hyperswitch\common\dto\ApplePayMerchantVerificationRequest.class
@@ -186,6 +189,7 @@ com\hyperswitch\common\dto\RevenueRecoveryAnalytics.class
 com\hyperswitch\common\dto\PaymentLinkRequest.class
 com\hyperswitch\common\dto\RoutingEvaluationResponse.class
 com\hyperswitch\common\types\CustomerId.class
+com\hyperswitch\common\dto\ProfileResponse.class
 com\hyperswitch\common\types\MandateStatus.class
 com\hyperswitch\common\dto\ThreeDsDecisionRuleExecuteRequest$PaymentData.class
 com\hyperswitch\common\dto\SubscriptionResponse.class

@@ -11,6 +11,7 @@ com\hyperswitch\storage\repository\WebhookEventRepository.class
 com\hyperswitch\storage\entity\PaymentMethodEntity.class
 com\hyperswitch\storage\entity\CustomerEntity.class
 com\hyperswitch\storage\repository\PaymentMethodRepository.class
+com\hyperswitch\storage\entity\ApiKeyEntity.class
 com\hyperswitch\storage\entity\TokenizationEntity.class
 com\hyperswitch\storage\repository\AuthenticationRepository.class
 com\hyperswitch\storage\repository\PaymentIntentRepository.class
@@ -18,6 +19,8 @@ com\hyperswitch\storage\repository\ConfigRepository.class
 com\hyperswitch\storage\repository\AuthorizationRepository.class
 com\hyperswitch\storage\entity\RevenueRecoveryEntity.class
 com\hyperswitch\storage\entity\AuthorizationEntity.class
+com\hyperswitch\storage\repository\BusinessProfileRepository.class
+com\hyperswitch\storage\repository\ApiKeyRepository.class
 com\hyperswitch\storage\repository\PaymentSessionRepository.class
 com\hyperswitch\storage\entity\EphemeralKeyEntity.class
 com\hyperswitch\storage\entity\PaymentIntentEntity.class
@@ -70,6 +73,7 @@ com\hyperswitch\storage\entity\MandateEntity$Builder.class
 com\hyperswitch\storage\repository\ConnectorSuccessRateRepository.class
 com\hyperswitch\storage\repository\SuccessRateWindowRepository.class
 com\hyperswitch\storage\entity\WebhookEventEntity.class
+com\hyperswitch\storage\entity\BusinessProfileEntity.class
 com\hyperswitch\storage\entity\PayoutAttemptEntity.class
 com\hyperswitch\storage\entity\ScheduledTaskEntity.class
 com\hyperswitch\storage\repository\RoutingConfigRepository.class
