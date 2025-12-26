@@ -3,7 +3,7 @@ package com.hyperswitch.core.profiles;
 import com.hyperswitch.common.dto.ProfileRequest;
 import com.hyperswitch.common.dto.ProfileResponse;
 import com.hyperswitch.common.errors.PaymentError;
-import com.hyperswitch.common.errors.Result;
+import com.hyperswitch.common.types.Result;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 

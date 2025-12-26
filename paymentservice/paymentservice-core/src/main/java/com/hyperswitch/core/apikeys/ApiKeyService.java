@@ -3,7 +3,7 @@ package com.hyperswitch.core.apikeys;
 import com.hyperswitch.common.dto.ApiKeyRequest;
 import com.hyperswitch.common.dto.ApiKeyResponse;
 import com.hyperswitch.common.errors.PaymentError;
-import com.hyperswitch.common.errors.Result;
+import com.hyperswitch.common.types.Result;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
