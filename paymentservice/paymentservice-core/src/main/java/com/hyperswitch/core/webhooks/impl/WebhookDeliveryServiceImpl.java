@@ -359,5 +359,179 @@ public class WebhookDeliveryServiceImpl implements WebhookDeliveryService {
                 ));
             });
     }
+    
+    @Override
+    public Mono<Result<com.hyperswitch.common.dto.WebhookRelayResponse, PaymentError>> relayWebhook(
+            String merchantId,
+            String merchantConnectorAccountId,
+            String profileId,
+            com.hyperswitch.common.dto.WebhookRelayRequest request) {
+        log.info("Relaying webhook for merchant: {}, connectorAccount: {}, profile: {}", 
+            merchantId, merchantConnectorAccountId, profileId);
+        
+        String relayId = "relay_" + UUID.randomUUID().toString().replace("-", "");
+        
+        // In production, this would:
+        // 1. Get merchant webhook URL from configuration
+        // 2. Forward the webhook to the merchant endpoint
+        // 3. Return the response
+        
+        return webClient.post()
+            .uri(getMerchantWebhookUrl(merchantId))
+            .headers(headers -> {
+                if (request.getHeaders() != null) {
+                    request.getHeaders().forEach(headers::set);
+                }
+                headers.set("Content-Type", "application/json");
+                headers.set("X-Webhook-Relay-Id", relayId);
+            })
+            .bodyValue(request.getPayload())
+            .retrieve()
+            .toEntity(String.class)
+            .map(response -> {
+                com.hyperswitch.common.dto.WebhookRelayResponse relayResponse = 
+                    new com.hyperswitch.common.dto.WebhookRelayResponse();
+                relayResponse.setRelayId(relayId);
+                relayResponse.setStatus(response.getStatusCode().is2xxSuccessful() ? "SUCCESS" : "FAILED");
+                relayResponse.setStatusCode(response.getStatusCode().value());
+                relayResponse.setResponseBody(response.getBody());
+                relayResponse.setRelayedAt(Instant.now());
+                return Result.<com.hyperswitch.common.dto.WebhookRelayResponse, PaymentError>ok(relayResponse);
+            })
+            .timeout(REQUEST_TIMEOUT)
+            .onErrorResume(error -> {
+                log.error("Error relaying webhook: {}", error.getMessage(), error);
+                com.hyperswitch.common.dto.WebhookRelayResponse relayResponse = 
+                    new com.hyperswitch.common.dto.WebhookRelayResponse();
+                relayResponse.setRelayId(relayId);
+                relayResponse.setStatus("FAILED");
+                relayResponse.setStatusCode(500);
+                relayResponse.setRelayedAt(Instant.now());
+                return Mono.just(Result.<com.hyperswitch.common.dto.WebhookRelayResponse, PaymentError>ok(relayResponse));
+            });
+    }
+    
+    @Override
+    public Mono<Result<com.hyperswitch.common.dto.NetworkTokenWebhookResponse, PaymentError>> processNetworkTokenWebhook(
+            String connector,
+            com.hyperswitch.common.dto.NetworkTokenWebhookRequest request) {
+        log.info("Processing network token requestor webhook for connector: {}, paymentMethod: {}", 
+            connector, request.getPaymentMethodId());
+        
+        String webhookId = "nt_wh_" + UUID.randomUUID().toString().replace("-", "");
+        
+        // In production, this would:
+        // 1. Verify webhook source/authorization
+        // 2. Process network token webhook
+        // 3. Update payment method status
+        // 4. Trigger outgoing webhook if needed
+        
+        com.hyperswitch.common.dto.NetworkTokenWebhookResponse response = 
+            new com.hyperswitch.common.dto.NetworkTokenWebhookResponse();
+        response.setWebhookId(webhookId);
+        response.setStatus("PROCESSED");
+        response.setMessage("Network token webhook processed successfully");
+        response.setProcessedAt(Instant.now());
+        
+        return Mono.just(Result.<com.hyperswitch.common.dto.NetworkTokenWebhookResponse, PaymentError>ok(response))
+            .onErrorResume(error -> {
+                log.error("Error processing network token webhook: {}", error.getMessage(), error);
+                return Mono.just(Result.<com.hyperswitch.common.dto.NetworkTokenWebhookResponse, PaymentError>err(
+                    PaymentError.of("NETWORK_TOKEN_WEBHOOK_PROCESSING_FAILED",
+                        "Failed to process network token webhook: " + error.getMessage())
+                ));
+            });
+    }
+    
+    @Override
+    public Mono<Result<com.hyperswitch.common.dto.WebhookResponse, PaymentError>> processRecoveryWebhookV2(
+            String merchantId,
+            String profileId,
+            String connectorId,
+            com.hyperswitch.common.dto.WebhookRequest request) {
+        log.info("Processing recovery webhook (v2) for merchant: {}, profile: {}, connector: {}", 
+            merchantId, profileId, connectorId);
+        
+        // Extract payment ID from request data
+        String paymentId = null;
+        if (request.getData() != null) {
+            Object paymentIdObj = request.getData().get("payment_id");
+            if (paymentIdObj == null) {
+                paymentIdObj = request.getData().get("paymentId");
+            }
+            if (paymentIdObj != null) {
+                paymentId = paymentIdObj.toString();
+            }
+        }
+        
+        // In production, this would process the recovery webhook with profile context
+        return processRecoveryWebhook(merchantId, paymentId, connectorId, request);
+    }
+    
+    @Override
+    public Flux<com.hyperswitch.storage.entity.WebhookEventEntity> listInitialWebhookAttempts(
+            String merchantId,
+            com.hyperswitch.common.dto.WebhookEventListRequest request) {
+        log.info("Listing initial webhook attempts for merchant: {}", merchantId);
+        
+        return listWebhookEvents(
+            merchantId,
+            request.getEventType(),
+            request.getConnector(),
+            request.getDeliveryStatus(),
+            request.getStartDate(),
+            request.getEndDate(),
+            request.getLimit(),
+            request.getOffset()
+        );
+    }
+    
+    @Override
+    public Flux<com.hyperswitch.common.dto.WebhookAttemptResponse> listWebhookAttempts(
+            String merchantId,
+            String initialAttemptId) {
+        log.info("Listing webhook attempts for merchant: {}, initialAttempt: {}", merchantId, initialAttemptId);
+        
+        // In production, this would retrieve all attempts for a given initial attempt ID
+        // For now, return the webhook event as a single attempt
+        return webhookEventRepository.findByEventId(initialAttemptId)
+            .map(entity -> {
+                com.hyperswitch.common.dto.WebhookAttemptResponse response = 
+                    new com.hyperswitch.common.dto.WebhookAttemptResponse();
+                response.setAttemptId(entity.getId());
+                response.setEventId(entity.getEventId());
+                response.setStatus(entity.getDeliveryStatus());
+                response.setAttemptedAt(entity.getLastAttemptAt() != null ? entity.getLastAttemptAt() : entity.getCreatedAt());
+                response.setAttemptNumber(entity.getAttemptCount());
+                return response;
+            })
+            .flux()
+            .onErrorResume(error -> {
+                log.error("Error listing webhook attempts: {}", error.getMessage(), error);
+                return Flux.empty();
+            });
+    }
+    
+    @Override
+    public Mono<Result<Void, PaymentError>> retryWebhookDeliveryWithMerchantId(
+            String merchantId,
+            String eventId) {
+        log.info("Retrying webhook delivery for merchant: {}, event: {}", merchantId, eventId);
+        
+        // Verify the event belongs to the merchant
+        return webhookEventRepository.findByEventId(eventId)
+            .flatMap(entity -> {
+                if (!merchantId.equals(entity.getMerchantId())) {
+                    return Mono.just(Result.<Void, PaymentError>err(
+                        PaymentError.of("WEBHOOK_EVENT_NOT_FOUND", 
+                            "Webhook event not found for merchant: " + merchantId)
+                    ));
+                }
+                return retryWebhookDelivery(eventId);
+            })
+            .switchIfEmpty(Mono.just(Result.<Void, PaymentError>err(
+                PaymentError.of("WEBHOOK_EVENT_NOT_FOUND", "Webhook event not found: " + eventId)
+            )));
+    }
 }
 

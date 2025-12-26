@@ -48,5 +48,57 @@ public interface WebhookDeliveryService {
         String connectorId,
         com.hyperswitch.common.dto.WebhookRequest request
     );
+    
+    /**
+     * Relay webhook
+     */
+    Mono<Result<com.hyperswitch.common.dto.WebhookRelayResponse, PaymentError>> relayWebhook(
+        String merchantId,
+        String merchantConnectorAccountId,
+        String profileId,
+        com.hyperswitch.common.dto.WebhookRelayRequest request
+    );
+    
+    /**
+     * Process network token requestor webhook
+     */
+    Mono<Result<com.hyperswitch.common.dto.NetworkTokenWebhookResponse, PaymentError>> processNetworkTokenWebhook(
+        String connector,
+        com.hyperswitch.common.dto.NetworkTokenWebhookRequest request
+    );
+    
+    /**
+     * Process recovery webhook (v2)
+     */
+    Mono<Result<com.hyperswitch.common.dto.WebhookResponse, PaymentError>> processRecoveryWebhookV2(
+        String merchantId,
+        String profileId,
+        String connectorId,
+        com.hyperswitch.common.dto.WebhookRequest request
+    );
+    
+    /**
+     * List initial webhook delivery attempts
+     */
+    reactor.core.publisher.Flux<com.hyperswitch.storage.entity.WebhookEventEntity> listInitialWebhookAttempts(
+        String merchantId,
+        com.hyperswitch.common.dto.WebhookEventListRequest request
+    );
+    
+    /**
+     * List webhook delivery attempts for an initial attempt
+     */
+    reactor.core.publisher.Flux<com.hyperswitch.common.dto.WebhookAttemptResponse> listWebhookAttempts(
+        String merchantId,
+        String initialAttemptId
+    );
+    
+    /**
+     * Retry webhook delivery (with merchant ID in path)
+     */
+    Mono<Result<Void, PaymentError>> retryWebhookDeliveryWithMerchantId(
+        String merchantId,
+        String eventId
+    );
 }
 
