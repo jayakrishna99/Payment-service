@@ -182,5 +182,153 @@ public interface RoutingService {
         String merchantId,
         RoutingRuleMigrationRequest request
     );
+    
+    /**
+     * List payout routing configurations
+     */
+    Mono<Result<Flux<PayoutRoutingResponse>, PaymentError>> listPayoutRoutings(String merchantId);
+    
+    /**
+     * Create payout routing configuration
+     */
+    Mono<Result<PayoutRoutingResponse, PaymentError>> createPayoutRouting(
+        String merchantId,
+        PayoutRoutingRequest request
+    );
+    
+    /**
+     * Get active payout routing
+     */
+    Mono<Result<PayoutRoutingResponse, PaymentError>> getActivePayoutRouting(String merchantId);
+    
+    /**
+     * Get default payout routing
+     */
+    Mono<Result<PayoutRoutingResponse, PaymentError>> getDefaultPayoutRouting(String merchantId);
+    
+    /**
+     * Set default payout routing
+     */
+    Mono<Result<PayoutRoutingResponse, PaymentError>> setDefaultPayoutRouting(
+        String merchantId,
+        PayoutRoutingRequest request
+    );
+    
+    /**
+     * Activate payout routing
+     */
+    Mono<Result<PayoutRoutingResponse, PaymentError>> activatePayoutRouting(
+        String merchantId,
+        String algorithmId
+    );
+    
+    /**
+     * Deactivate payout routing
+     */
+    Mono<Result<Void, PaymentError>> deactivatePayoutRouting(String merchantId);
+    
+    /**
+     * Set default payout routing for profile
+     */
+    Mono<Result<PayoutRoutingResponse, PaymentError>> setDefaultPayoutRoutingForProfile(
+        String merchantId,
+        String profileId,
+        PayoutRoutingRequest request
+    );
+    
+    /**
+     * Get default payout routing for profiles
+     */
+    Mono<Result<Flux<PayoutRoutingResponse>, PaymentError>> getDefaultPayoutRoutingForProfiles(String merchantId);
+    
+    /**
+     * Create routing algorithm (v2 API)
+     */
+    Mono<Result<RoutingAlgorithmV2Response, PaymentError>> createRoutingAlgorithmV2(
+        String merchantId,
+        RoutingAlgorithmV2Request request
+    );
+    
+    /**
+     * Get routing algorithm (v2 API)
+     */
+    Mono<Result<RoutingAlgorithmV2Response, PaymentError>> getRoutingAlgorithmV2(
+        String merchantId,
+        String algorithmId
+    );
+    
+    /**
+     * Create success-based routing
+     */
+    Mono<Result<DynamicRoutingResponse, PaymentError>> createSuccessBasedRouting(
+        String accountId,
+        String profileId,
+        DynamicRoutingRequest request
+    );
+    
+    /**
+     * Update success-based routing config
+     */
+    Mono<Result<DynamicRoutingResponse, PaymentError>> updateSuccessBasedRoutingConfig(
+        String accountId,
+        String profileId,
+        String algorithmId,
+        DynamicRoutingRequest request
+    );
+    
+    /**
+     * Create elimination routing
+     */
+    Mono<Result<DynamicRoutingResponse, PaymentError>> createEliminationRouting(
+        String accountId,
+        String profileId,
+        DynamicRoutingRequest request
+    );
+    
+    /**
+     * Update elimination routing config
+     */
+    Mono<Result<DynamicRoutingResponse, PaymentError>> updateEliminationRoutingConfig(
+        String accountId,
+        String profileId,
+        String algorithmId,
+        DynamicRoutingRequest request
+    );
+    
+    /**
+     * Toggle contract-based routing
+     */
+    Mono<Result<DynamicRoutingResponse, PaymentError>> toggleContractBasedRouting(
+        String accountId,
+        String profileId,
+        DynamicRoutingRequest request
+    );
+    
+    /**
+     * Update contract-based routing config
+     */
+    Mono<Result<DynamicRoutingResponse, PaymentError>> updateContractBasedRoutingConfig(
+        String accountId,
+        String profileId,
+        String algorithmId,
+        DynamicRoutingRequest request
+    );
+    
+    /**
+     * Set volume split
+     */
+    Mono<Result<VolumeSplitResponse, PaymentError>> setVolumeSplit(
+        String accountId,
+        String profileId,
+        VolumeSplitRequest request
+    );
+    
+    /**
+     * Get volume split
+     */
+    Mono<Result<VolumeSplitResponse, PaymentError>> getVolumeSplit(
+        String accountId,
+        String profileId
+    );
 }
 

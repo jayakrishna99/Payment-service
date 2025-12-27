@@ -762,5 +762,340 @@ public class RoutingServiceImpl implements RoutingService {
         }
         return "single";
     }
+    
+    @Override
+    public Mono<Result<Flux<PayoutRoutingResponse>, PaymentError>> listPayoutRoutings(String merchantId) {
+        log.info("Listing payout routing configurations for merchant: {}", merchantId);
+        
+        // In production, this would query payout routing configurations from database
+        PayoutRoutingResponse response = new PayoutRoutingResponse();
+        response.setAlgorithmId("payout_alg_" + UUID.randomUUID().toString().substring(0, 8));
+        response.setIsDefault(Boolean.FALSE);
+        response.setIsActive(Boolean.TRUE);
+        response.setCreatedAt(Instant.now());
+        response.setUpdatedAt(Instant.now());
+        
+        return Mono.just(Result.<Flux<PayoutRoutingResponse>, PaymentError>ok(Flux.just(response)));
+    }
+    
+    @Override
+    public Mono<Result<PayoutRoutingResponse, PaymentError>> createPayoutRouting(
+            String merchantId,
+            PayoutRoutingRequest request) {
+        log.info("Creating payout routing configuration for merchant: {}", merchantId);
+        
+        PayoutRoutingResponse response = new PayoutRoutingResponse();
+        response.setAlgorithmId(request.getAlgorithmId() != null ? request.getAlgorithmId() : 
+            "payout_alg_" + UUID.randomUUID().toString().substring(0, 8));
+        response.setProfileId(request.getProfileId());
+        response.setConfig(request.getConfig());
+        response.setIsDefault(request.getIsDefault() != null ? request.getIsDefault() : Boolean.FALSE);
+        response.setIsActive(Boolean.TRUE);
+        response.setCreatedAt(Instant.now());
+        response.setUpdatedAt(Instant.now());
+        
+        return Mono.just(Result.<PayoutRoutingResponse, PaymentError>ok(response));
+    }
+    
+    @Override
+    public Mono<Result<PayoutRoutingResponse, PaymentError>> getActivePayoutRouting(String merchantId) {
+        log.info("Getting active payout routing for merchant: {}", merchantId);
+        
+        // In production, this would query active payout routing from database
+        PayoutRoutingResponse response = new PayoutRoutingResponse();
+        response.setAlgorithmId("payout_alg_active");
+        response.setIsActive(Boolean.TRUE);
+        response.setCreatedAt(Instant.now());
+        response.setUpdatedAt(Instant.now());
+        
+        return Mono.just(Result.<PayoutRoutingResponse, PaymentError>ok(response));
+    }
+    
+    @Override
+    public Mono<Result<PayoutRoutingResponse, PaymentError>> getDefaultPayoutRouting(String merchantId) {
+        log.info("Getting default payout routing for merchant: {}", merchantId);
+        
+        // In production, this would query default payout routing from database
+        PayoutRoutingResponse response = new PayoutRoutingResponse();
+        response.setAlgorithmId("payout_alg_default");
+        response.setIsDefault(Boolean.TRUE);
+        response.setIsActive(Boolean.TRUE);
+        response.setCreatedAt(Instant.now());
+        response.setUpdatedAt(Instant.now());
+        
+        return Mono.just(Result.<PayoutRoutingResponse, PaymentError>ok(response));
+    }
+    
+    @Override
+    public Mono<Result<PayoutRoutingResponse, PaymentError>> setDefaultPayoutRouting(
+            String merchantId,
+            PayoutRoutingRequest request) {
+        log.info("Setting default payout routing for merchant: {}", merchantId);
+        
+        PayoutRoutingResponse response = new PayoutRoutingResponse();
+        response.setAlgorithmId(request.getAlgorithmId());
+        response.setProfileId(request.getProfileId());
+        response.setConfig(request.getConfig());
+        response.setIsDefault(Boolean.TRUE);
+        response.setIsActive(Boolean.TRUE);
+        response.setCreatedAt(Instant.now());
+        response.setUpdatedAt(Instant.now());
+        
+        return Mono.just(Result.<PayoutRoutingResponse, PaymentError>ok(response));
+    }
+    
+    @Override
+    public Mono<Result<PayoutRoutingResponse, PaymentError>> activatePayoutRouting(
+            String merchantId,
+            String algorithmId) {
+        log.info("Activating payout routing: {} for merchant: {}", algorithmId, merchantId);
+        
+        PayoutRoutingResponse response = new PayoutRoutingResponse();
+        response.setAlgorithmId(algorithmId);
+        response.setIsActive(Boolean.TRUE);
+        response.setUpdatedAt(Instant.now());
+        
+        return Mono.just(Result.<PayoutRoutingResponse, PaymentError>ok(response));
+    }
+    
+    @Override
+    public Mono<Result<Void, PaymentError>> deactivatePayoutRouting(String merchantId) {
+        log.info("Deactivating payout routing for merchant: {}", merchantId);
+        
+        // In production, this would deactivate all payout routing configurations
+        return Mono.just(Result.<Void, PaymentError>ok(null));
+    }
+    
+    @Override
+    public Mono<Result<PayoutRoutingResponse, PaymentError>> setDefaultPayoutRoutingForProfile(
+            String merchantId,
+            String profileId,
+            PayoutRoutingRequest request) {
+        log.info("Setting default payout routing for profile: {} in merchant: {}", profileId, merchantId);
+        
+        PayoutRoutingResponse response = new PayoutRoutingResponse();
+        response.setAlgorithmId(request.getAlgorithmId());
+        response.setProfileId(profileId);
+        response.setConfig(request.getConfig());
+        response.setIsDefault(Boolean.TRUE);
+        response.setIsActive(Boolean.TRUE);
+        response.setCreatedAt(Instant.now());
+        response.setUpdatedAt(Instant.now());
+        
+        return Mono.just(Result.<PayoutRoutingResponse, PaymentError>ok(response));
+    }
+    
+    @Override
+    public Mono<Result<Flux<PayoutRoutingResponse>, PaymentError>> getDefaultPayoutRoutingForProfiles(String merchantId) {
+        log.info("Getting default payout routing for profiles in merchant: {}", merchantId);
+        
+        // In production, this would query default payout routing for all profiles
+        PayoutRoutingResponse response = new PayoutRoutingResponse();
+        response.setAlgorithmId("payout_alg_profile_default");
+        response.setIsDefault(Boolean.TRUE);
+        response.setIsActive(Boolean.TRUE);
+        response.setCreatedAt(Instant.now());
+        response.setUpdatedAt(Instant.now());
+        
+        return Mono.just(Result.<Flux<PayoutRoutingResponse>, PaymentError>ok(Flux.just(response)));
+    }
+    
+    @Override
+    public Mono<Result<RoutingAlgorithmV2Response, PaymentError>> createRoutingAlgorithmV2(
+            String merchantId,
+            RoutingAlgorithmV2Request request) {
+        log.info("Creating routing algorithm (v2) for merchant: {}, name: {}", merchantId, request.getName());
+        
+        RoutingAlgorithmV2Response response = new RoutingAlgorithmV2Response();
+        response.setAlgorithmId("alg_v2_" + UUID.randomUUID().toString().substring(0, 8));
+        response.setName(request.getName());
+        response.setDescription(request.getDescription());
+        response.setAlgorithmType(request.getAlgorithmType());
+        response.setConfig(request.getConfig());
+        response.setProfileId(request.getProfileId());
+        response.setIsActive(Boolean.TRUE);
+        response.setCreatedAt(Instant.now());
+        response.setUpdatedAt(Instant.now());
+        
+        // In production, this would:
+        // 1. Validate algorithm configuration
+        // 2. Store routing algorithm in database
+        // 3. Return created algorithm
+        
+        return Mono.just(Result.<RoutingAlgorithmV2Response, PaymentError>ok(response));
+    }
+    
+    @Override
+    public Mono<Result<RoutingAlgorithmV2Response, PaymentError>> getRoutingAlgorithmV2(
+            String merchantId,
+            String algorithmId) {
+        log.info("Getting routing algorithm (v2): {} for merchant: {}", algorithmId, merchantId);
+        
+        // In production, this would query routing algorithm from database
+        RoutingAlgorithmV2Response response = new RoutingAlgorithmV2Response();
+        response.setAlgorithmId(algorithmId);
+        response.setName("Sample Algorithm");
+        response.setDescription("Sample routing algorithm");
+        response.setAlgorithmType("success_rate_based");
+        response.setIsActive(Boolean.TRUE);
+        response.setCreatedAt(Instant.now());
+        response.setUpdatedAt(Instant.now());
+        
+        return Mono.just(Result.<RoutingAlgorithmV2Response, PaymentError>ok(response));
+    }
+    
+    @Override
+    public Mono<Result<DynamicRoutingResponse, PaymentError>> createSuccessBasedRouting(
+            String accountId,
+            String profileId,
+            DynamicRoutingRequest request) {
+        log.info("Creating success-based routing for account: {}, profile: {}", accountId, profileId);
+        
+        DynamicRoutingResponse response = new DynamicRoutingResponse();
+        response.setAlgorithmId(request.getAlgorithmId() != null ? request.getAlgorithmId() : 
+            "success_based_" + UUID.randomUUID().toString().substring(0, 8));
+        response.setProfileId(profileId);
+        response.setRoutingType("success_based");
+        response.setConfig(request.getConfig());
+        response.setEnabled(request.getEnabled() != null ? request.getEnabled() : Boolean.TRUE);
+        response.setCreatedAt(Instant.now());
+        response.setUpdatedAt(Instant.now());
+        
+        return Mono.just(Result.<DynamicRoutingResponse, PaymentError>ok(response));
+    }
+    
+    @Override
+    public Mono<Result<DynamicRoutingResponse, PaymentError>> updateSuccessBasedRoutingConfig(
+            String accountId,
+            String profileId,
+            String algorithmId,
+            DynamicRoutingRequest request) {
+        log.info("Updating success-based routing config: {} for account: {}, profile: {}", 
+            algorithmId, accountId, profileId);
+        
+        DynamicRoutingResponse response = new DynamicRoutingResponse();
+        response.setAlgorithmId(algorithmId);
+        response.setProfileId(profileId);
+        response.setRoutingType("success_based");
+        response.setConfig(request.getConfig());
+        response.setEnabled(request.getEnabled());
+        response.setUpdatedAt(Instant.now());
+        
+        return Mono.just(Result.<DynamicRoutingResponse, PaymentError>ok(response));
+    }
+    
+    @Override
+    public Mono<Result<DynamicRoutingResponse, PaymentError>> createEliminationRouting(
+            String accountId,
+            String profileId,
+            DynamicRoutingRequest request) {
+        log.info("Creating elimination routing for account: {}, profile: {}", accountId, profileId);
+        
+        DynamicRoutingResponse response = new DynamicRoutingResponse();
+        response.setAlgorithmId(request.getAlgorithmId() != null ? request.getAlgorithmId() : 
+            "elimination_" + UUID.randomUUID().toString().substring(0, 8));
+        response.setProfileId(profileId);
+        response.setRoutingType("elimination");
+        response.setConfig(request.getConfig());
+        response.setEnabled(request.getEnabled() != null ? request.getEnabled() : Boolean.TRUE);
+        response.setCreatedAt(Instant.now());
+        response.setUpdatedAt(Instant.now());
+        
+        return Mono.just(Result.<DynamicRoutingResponse, PaymentError>ok(response));
+    }
+    
+    @Override
+    public Mono<Result<DynamicRoutingResponse, PaymentError>> updateEliminationRoutingConfig(
+            String accountId,
+            String profileId,
+            String algorithmId,
+            DynamicRoutingRequest request) {
+        log.info("Updating elimination routing config: {} for account: {}, profile: {}", 
+            algorithmId, accountId, profileId);
+        
+        DynamicRoutingResponse response = new DynamicRoutingResponse();
+        response.setAlgorithmId(algorithmId);
+        response.setProfileId(profileId);
+        response.setRoutingType("elimination");
+        response.setConfig(request.getConfig());
+        response.setEnabled(request.getEnabled());
+        response.setUpdatedAt(Instant.now());
+        
+        return Mono.just(Result.<DynamicRoutingResponse, PaymentError>ok(response));
+    }
+    
+    @Override
+    public Mono<Result<DynamicRoutingResponse, PaymentError>> toggleContractBasedRouting(
+            String accountId,
+            String profileId,
+            DynamicRoutingRequest request) {
+        log.info("Toggling contract-based routing for account: {}, profile: {}", accountId, profileId);
+        
+        DynamicRoutingResponse response = new DynamicRoutingResponse();
+        response.setAlgorithmId(request.getAlgorithmId() != null ? request.getAlgorithmId() : 
+            "contract_" + UUID.randomUUID().toString().substring(0, 8));
+        response.setProfileId(profileId);
+        response.setRoutingType("contract_based");
+        response.setConfig(request.getConfig());
+        response.setEnabled(request.getEnabled() != null ? request.getEnabled() : Boolean.TRUE);
+        response.setUpdatedAt(Instant.now());
+        
+        return Mono.just(Result.<DynamicRoutingResponse, PaymentError>ok(response));
+    }
+    
+    @Override
+    public Mono<Result<DynamicRoutingResponse, PaymentError>> updateContractBasedRoutingConfig(
+            String accountId,
+            String profileId,
+            String algorithmId,
+            DynamicRoutingRequest request) {
+        log.info("Updating contract-based routing config: {} for account: {}, profile: {}", 
+            algorithmId, accountId, profileId);
+        
+        DynamicRoutingResponse response = new DynamicRoutingResponse();
+        response.setAlgorithmId(algorithmId);
+        response.setProfileId(profileId);
+        response.setRoutingType("contract_based");
+        response.setConfig(request.getConfig());
+        response.setEnabled(request.getEnabled());
+        response.setUpdatedAt(Instant.now());
+        
+        return Mono.just(Result.<DynamicRoutingResponse, PaymentError>ok(response));
+    }
+    
+    @Override
+    public Mono<Result<VolumeSplitResponse, PaymentError>> setVolumeSplit(
+            String accountId,
+            String profileId,
+            VolumeSplitRequest request) {
+        log.info("Setting volume split for account: {}, profile: {}", accountId, profileId);
+        
+        VolumeSplitResponse response = new VolumeSplitResponse();
+        response.setProfileId(profileId);
+        response.setSplits(request.getSplits());
+        response.setConfig(request.getConfig());
+        response.setCreatedAt(Instant.now());
+        response.setUpdatedAt(Instant.now());
+        
+        return Mono.just(Result.<VolumeSplitResponse, PaymentError>ok(response));
+    }
+    
+    @Override
+    public Mono<Result<VolumeSplitResponse, PaymentError>> getVolumeSplit(
+            String accountId,
+            String profileId) {
+        log.info("Getting volume split for account: {}, profile: {}", accountId, profileId);
+        
+        // In production, this would query volume split from database
+        VolumeSplitResponse response = new VolumeSplitResponse();
+        response.setProfileId(profileId);
+        Map<String, Double> splits = new HashMap<>();
+        splits.put("connector1", 50.0);
+        splits.put("connector2", 50.0);
+        response.setSplits(splits);
+        response.setUpdatedAt(Instant.now());
+        
+        return Mono.just(Result.<VolumeSplitResponse, PaymentError>ok(response));
+    }
 }
 

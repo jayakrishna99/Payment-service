@@ -647,5 +647,265 @@ public class RoutingController {
                 }
             });
     }
+    
+    /**
+     * List payout routing configurations
+     * GET /api/routing/payouts
+     */
+    @GetMapping("/payouts")
+    @Operation(
+        summary = "List payout routing configurations",
+        description = "Lists all payout routing configurations"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Payout routing configurations retrieved successfully"
+        )
+    })
+    public Mono<ResponseEntity<Flux<PayoutRoutingResponse>>> listPayoutRoutings(
+            @RequestHeader("merchant_id") String merchantId) {
+        return routingService.listPayoutRoutings(merchantId)
+            .map(result -> {
+                if (result.isOk()) {
+                    return ResponseEntity.ok(result.unwrap());
+                } else {
+                    throw new PaymentException(result.unwrapErr());
+                }
+            });
+    }
+    
+    /**
+     * Create payout routing configuration
+     * POST /api/routing/payouts
+     */
+    @PostMapping("/payouts")
+    @Operation(
+        summary = "Create payout routing configuration",
+        description = "Creates a new payout routing configuration"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Payout routing configuration created successfully",
+            content = @Content(schema = @Schema(implementation = PayoutRoutingResponse.class))
+        ),
+        @ApiResponse(responseCode = "400", description = "Invalid request")
+    })
+    public Mono<ResponseEntity<PayoutRoutingResponse>> createPayoutRouting(
+            @RequestHeader("merchant_id") String merchantId,
+            @RequestBody PayoutRoutingRequest request) {
+        return routingService.createPayoutRouting(merchantId, request)
+            .map(result -> {
+                if (result.isOk()) {
+                    return ResponseEntity.ok(result.unwrap());
+                } else {
+                    throw new PaymentException(result.unwrapErr());
+                }
+            });
+    }
+    
+    /**
+     * Get active payout routing
+     * GET /api/routing/payouts/active
+     */
+    @GetMapping("/payouts/active")
+    @Operation(
+        summary = "Get active payout routing",
+        description = "Retrieves the currently active payout routing configuration"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Active payout routing retrieved successfully",
+            content = @Content(schema = @Schema(implementation = PayoutRoutingResponse.class))
+        ),
+        @ApiResponse(responseCode = "404", description = "No active payout routing found")
+    })
+    public Mono<ResponseEntity<PayoutRoutingResponse>> getActivePayoutRouting(
+            @RequestHeader("merchant_id") String merchantId) {
+        return routingService.getActivePayoutRouting(merchantId)
+            .map(result -> {
+                if (result.isOk()) {
+                    return ResponseEntity.ok(result.unwrap());
+                } else {
+                    throw new PaymentException(result.unwrapErr());
+                }
+            });
+    }
+    
+    /**
+     * Get default payout routing
+     * GET /api/routing/payouts/default
+     */
+    @GetMapping("/payouts/default")
+    @Operation(
+        summary = "Get default payout routing",
+        description = "Retrieves the default payout routing configuration"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Default payout routing retrieved successfully",
+            content = @Content(schema = @Schema(implementation = PayoutRoutingResponse.class))
+        ),
+        @ApiResponse(responseCode = "404", description = "No default payout routing found")
+    })
+    public Mono<ResponseEntity<PayoutRoutingResponse>> getDefaultPayoutRouting(
+            @RequestHeader("merchant_id") String merchantId) {
+        return routingService.getDefaultPayoutRouting(merchantId)
+            .map(result -> {
+                if (result.isOk()) {
+                    return ResponseEntity.ok(result.unwrap());
+                } else {
+                    throw new PaymentException(result.unwrapErr());
+                }
+            });
+    }
+    
+    /**
+     * Set default payout routing
+     * POST /api/routing/payouts/default
+     */
+    @PostMapping("/payouts/default")
+    @Operation(
+        summary = "Set default payout routing",
+        description = "Sets the default payout routing configuration"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Default payout routing set successfully",
+            content = @Content(schema = @Schema(implementation = PayoutRoutingResponse.class))
+        ),
+        @ApiResponse(responseCode = "400", description = "Invalid request")
+    })
+    public Mono<ResponseEntity<PayoutRoutingResponse>> setDefaultPayoutRouting(
+            @RequestHeader("merchant_id") String merchantId,
+            @RequestBody PayoutRoutingRequest request) {
+        return routingService.setDefaultPayoutRouting(merchantId, request)
+            .map(result -> {
+                if (result.isOk()) {
+                    return ResponseEntity.ok(result.unwrap());
+                } else {
+                    throw new PaymentException(result.unwrapErr());
+                }
+            });
+    }
+    
+    /**
+     * Activate payout routing
+     * POST /api/routing/payouts/{algorithm_id}/activate
+     */
+    @PostMapping("/payouts/{algorithm_id}/activate")
+    @Operation(
+        summary = "Activate payout routing",
+        description = "Activates a payout routing configuration"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Payout routing activated successfully",
+            content = @Content(schema = @Schema(implementation = PayoutRoutingResponse.class))
+        ),
+        @ApiResponse(responseCode = "404", description = "Payout routing not found")
+    })
+    public Mono<ResponseEntity<PayoutRoutingResponse>> activatePayoutRouting(
+            @RequestHeader("merchant_id") String merchantId,
+            @PathVariable("algorithm_id") String algorithmId) {
+        return routingService.activatePayoutRouting(merchantId, algorithmId)
+            .map(result -> {
+                if (result.isOk()) {
+                    return ResponseEntity.ok(result.unwrap());
+                } else {
+                    throw new PaymentException(result.unwrapErr());
+                }
+            });
+    }
+    
+    /**
+     * Deactivate payout routing
+     * POST /api/routing/payouts/deactivate
+     */
+    @PostMapping("/payouts/deactivate")
+    @Operation(
+        summary = "Deactivate payout routing",
+        description = "Deactivates all payout routing configurations"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Payout routing deactivated successfully"
+        )
+    })
+    public Mono<ResponseEntity<Void>> deactivatePayoutRouting(
+            @RequestHeader("merchant_id") String merchantId) {
+        return routingService.deactivatePayoutRouting(merchantId)
+            .map(result -> {
+                if (result.isOk()) {
+                    return ResponseEntity.ok().build();
+                } else {
+                    throw new PaymentException(result.unwrapErr());
+                }
+            });
+    }
+    
+    /**
+     * Set default payout routing for profile
+     * POST /api/routing/payouts/default/profile/{profile_id}
+     */
+    @PostMapping("/payouts/default/profile/{profile_id}")
+    @Operation(
+        summary = "Set default payout routing for profile",
+        description = "Sets the default payout routing configuration for a specific profile"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Default payout routing set successfully",
+            content = @Content(schema = @Schema(implementation = PayoutRoutingResponse.class))
+        ),
+        @ApiResponse(responseCode = "400", description = "Invalid request")
+    })
+    public Mono<ResponseEntity<PayoutRoutingResponse>> setDefaultPayoutRoutingForProfile(
+            @RequestHeader("merchant_id") String merchantId,
+            @PathVariable("profile_id") String profileId,
+            @RequestBody PayoutRoutingRequest request) {
+        return routingService.setDefaultPayoutRoutingForProfile(merchantId, profileId, request)
+            .map(result -> {
+                if (result.isOk()) {
+                    return ResponseEntity.ok(result.unwrap());
+                } else {
+                    throw new PaymentException(result.unwrapErr());
+                }
+            });
+    }
+    
+    /**
+     * Get default payout routing for profiles
+     * GET /api/routing/payouts/default/profile
+     */
+    @GetMapping("/payouts/default/profile")
+    @Operation(
+        summary = "Get default payout routing for profiles",
+        description = "Retrieves default payout routing configurations for all profiles"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Default payout routing configurations retrieved successfully"
+        )
+    })
+    public Mono<ResponseEntity<Flux<PayoutRoutingResponse>>> getDefaultPayoutRoutingForProfiles(
+            @RequestHeader("merchant_id") String merchantId) {
+        return routingService.getDefaultPayoutRoutingForProfiles(merchantId)
+            .map(result -> {
+                if (result.isOk()) {
+                    return ResponseEntity.ok(result.unwrap());
+                } else {
+                    throw new PaymentException(result.unwrapErr());
+                }
+            });
+    }
 }
 
