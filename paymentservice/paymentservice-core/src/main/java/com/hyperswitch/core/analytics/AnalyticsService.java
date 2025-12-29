@@ -451,5 +451,271 @@ public interface AnalyticsService {
     Mono<Result<com.hyperswitch.common.dto.ApiEventFiltersResponse, PaymentError>> getProfileApiEventFilters(
             String profileId,
             com.hyperswitch.common.dto.ApiEventFiltersRequest request);
+    
+    /**
+     * Generate dispute report
+     */
+    Mono<Result<com.hyperswitch.common.dto.DisputeReportResponse, PaymentError>> generateDisputeReport(
+            String merchantId,
+            com.hyperswitch.common.dto.DisputeReportRequest request);
+    
+    /**
+     * Generate merchant dispute report
+     */
+    Mono<Result<com.hyperswitch.common.dto.DisputeReportResponse, PaymentError>> generateMerchantDisputeReport(
+            String merchantId,
+            com.hyperswitch.common.dto.DisputeReportRequest request);
+    
+    /**
+     * Generate org dispute report
+     */
+    Mono<Result<com.hyperswitch.common.dto.DisputeReportResponse, PaymentError>> generateOrgDisputeReport(
+            String orgId,
+            com.hyperswitch.common.dto.DisputeReportRequest request);
+    
+    /**
+     * Generate profile dispute report
+     */
+    Mono<Result<com.hyperswitch.common.dto.DisputeReportResponse, PaymentError>> generateProfileDisputeReport(
+            String profileId,
+            com.hyperswitch.common.dto.DisputeReportRequest request);
+    
+    /**
+     * Generate refund report
+     */
+    Mono<Result<com.hyperswitch.common.dto.RefundReportResponse, PaymentError>> generateRefundReport(
+            String merchantId,
+            com.hyperswitch.common.dto.RefundReportRequest request);
+    
+    /**
+     * Generate merchant refund report
+     */
+    Mono<Result<com.hyperswitch.common.dto.RefundReportResponse, PaymentError>> generateMerchantRefundReport(
+            String merchantId,
+            com.hyperswitch.common.dto.RefundReportRequest request);
+    
+    /**
+     * Generate org refund report
+     */
+    Mono<Result<com.hyperswitch.common.dto.RefundReportResponse, PaymentError>> generateOrgRefundReport(
+            String orgId,
+            com.hyperswitch.common.dto.RefundReportRequest request);
+    
+    /**
+     * Generate profile refund report
+     */
+    Mono<Result<com.hyperswitch.common.dto.RefundReportResponse, PaymentError>> generateProfileRefundReport(
+            String profileId,
+            com.hyperswitch.common.dto.RefundReportRequest request);
+    
+    /**
+     * Generate payment report
+     */
+    Mono<Result<com.hyperswitch.common.dto.PaymentReportResponse, PaymentError>> generatePaymentReport(
+            String merchantId,
+            com.hyperswitch.common.dto.PaymentReportRequest request);
+    
+    /**
+     * Generate merchant payment report
+     */
+    Mono<Result<com.hyperswitch.common.dto.PaymentReportResponse, PaymentError>> generateMerchantPaymentReport(
+            String merchantId,
+            com.hyperswitch.common.dto.PaymentReportRequest request);
+    
+    /**
+     * Generate org payment report
+     */
+    Mono<Result<com.hyperswitch.common.dto.PaymentReportResponse, PaymentError>> generateOrgPaymentReport(
+            String orgId,
+            com.hyperswitch.common.dto.PaymentReportRequest request);
+    
+    /**
+     * Generate profile payment report
+     */
+    Mono<Result<com.hyperswitch.common.dto.PaymentReportResponse, PaymentError>> generateProfilePaymentReport(
+            String profileId,
+            com.hyperswitch.common.dto.PaymentReportRequest request);
+    
+    /**
+     * Generate payout report
+     */
+    Mono<Result<com.hyperswitch.common.dto.PayoutReportResponse, PaymentError>> generatePayoutReport(
+            String merchantId,
+            com.hyperswitch.common.dto.PayoutReportRequest request);
+    
+    /**
+     * Generate merchant payout report
+     */
+    Mono<Result<com.hyperswitch.common.dto.PayoutReportResponse, PaymentError>> generateMerchantPayoutReport(
+            String merchantId,
+            com.hyperswitch.common.dto.PayoutReportRequest request);
+    
+    /**
+     * Generate org payout report
+     */
+    Mono<Result<com.hyperswitch.common.dto.PayoutReportResponse, PaymentError>> generateOrgPayoutReport(
+            String orgId,
+            com.hyperswitch.common.dto.PayoutReportRequest request);
+    
+    /**
+     * Generate profile payout report
+     */
+    Mono<Result<com.hyperswitch.common.dto.PayoutReportResponse, PaymentError>> generateProfilePayoutReport(
+            String profileId,
+            com.hyperswitch.common.dto.PayoutReportRequest request);
+    
+    /**
+     * Generate authentication report
+     */
+    Mono<Result<com.hyperswitch.common.dto.AuthenticationReportResponse, PaymentError>> generateAuthenticationReport(
+            String merchantId,
+            com.hyperswitch.common.dto.AuthenticationReportRequest request);
+    
+    /**
+     * Generate merchant authentication report
+     */
+    Mono<Result<com.hyperswitch.common.dto.AuthenticationReportResponse, PaymentError>> generateMerchantAuthenticationReport(
+            String merchantId,
+            com.hyperswitch.common.dto.AuthenticationReportRequest request);
+    
+    /**
+     * Generate org authentication report
+     */
+    Mono<Result<com.hyperswitch.common.dto.AuthenticationReportResponse, PaymentError>> generateOrgAuthenticationReport(
+            String orgId,
+            com.hyperswitch.common.dto.AuthenticationReportRequest request);
+    
+    /**
+     * Generate profile authentication report
+     */
+    Mono<Result<com.hyperswitch.common.dto.AuthenticationReportResponse, PaymentError>> generateProfileAuthenticationReport(
+            String profileId,
+            com.hyperswitch.common.dto.AuthenticationReportRequest request);
+    
+    /**
+     * Get API event logs
+     */
+    Mono<Result<com.hyperswitch.common.dto.ApiEventLogsResponse, PaymentError>> getApiEventLogs(
+            String merchantId,
+            com.hyperswitch.common.dto.ApiEventLogsRequest request);
+    
+    /**
+     * Get profile API event logs
+     */
+    Mono<Result<com.hyperswitch.common.dto.ApiEventLogsResponse, PaymentError>> getProfileApiEventLogs(
+            String profileId,
+            com.hyperswitch.common.dto.ApiEventLogsRequest request);
+    
+    /**
+     * Get SDK event logs
+     */
+    Mono<Result<com.hyperswitch.common.dto.SdkEventLogsResponse, PaymentError>> getSdkEventLogs(
+            String merchantId,
+            com.hyperswitch.common.dto.SdkEventLogsRequest request);
+    
+    /**
+     * Get profile SDK event logs
+     */
+    Mono<Result<com.hyperswitch.common.dto.SdkEventLogsResponse, PaymentError>> getProfileSdkEventLogs(
+            String profileId,
+            com.hyperswitch.common.dto.SdkEventLogsRequest request);
+    
+    /**
+     * Get connector event logs
+     */
+    Mono<Result<com.hyperswitch.common.dto.ConnectorEventLogsResponse, PaymentError>> getConnectorEventLogs(
+            String merchantId,
+            com.hyperswitch.common.dto.ConnectorEventLogsRequest request);
+    
+    /**
+     * Get profile connector event logs
+     */
+    Mono<Result<com.hyperswitch.common.dto.ConnectorEventLogsResponse, PaymentError>> getProfileConnectorEventLogs(
+            String profileId,
+            com.hyperswitch.common.dto.ConnectorEventLogsRequest request);
+    
+    /**
+     * Get routing event logs
+     */
+    Mono<Result<com.hyperswitch.common.dto.RoutingEventLogsResponse, PaymentError>> getRoutingEventLogs(
+            String merchantId,
+            com.hyperswitch.common.dto.RoutingEventLogsRequest request);
+    
+    /**
+     * Get profile routing event logs
+     */
+    Mono<Result<com.hyperswitch.common.dto.RoutingEventLogsResponse, PaymentError>> getProfileRoutingEventLogs(
+            String profileId,
+            com.hyperswitch.common.dto.RoutingEventLogsRequest request);
+    
+    /**
+     * Get outgoing webhook event logs
+     */
+    Mono<Result<com.hyperswitch.common.dto.OutgoingWebhookEventLogsResponse, PaymentError>> getOutgoingWebhookEventLogs(
+            String merchantId,
+            com.hyperswitch.common.dto.OutgoingWebhookEventLogsRequest request);
+    
+    /**
+     * Get profile outgoing webhook event logs
+     */
+    Mono<Result<com.hyperswitch.common.dto.OutgoingWebhookEventLogsResponse, PaymentError>> getProfileOutgoingWebhookEventLogs(
+            String profileId,
+            com.hyperswitch.common.dto.OutgoingWebhookEventLogsRequest request);
+    
+    /**
+     * Get payment sankey diagram
+     */
+    Mono<Result<com.hyperswitch.common.dto.SankeyResponse, PaymentError>> getSankey(
+            String merchantId,
+            com.hyperswitch.common.dto.SankeyRequest request);
+    
+    /**
+     * Get merchant payment sankey diagram
+     */
+    Mono<Result<com.hyperswitch.common.dto.SankeyResponse, PaymentError>> getMerchantSankey(
+            String merchantId,
+            com.hyperswitch.common.dto.SankeyRequest request);
+    
+    /**
+     * Get org payment sankey diagram
+     */
+    Mono<Result<com.hyperswitch.common.dto.SankeyResponse, PaymentError>> getOrgSankey(
+            String orgId,
+            com.hyperswitch.common.dto.SankeyRequest request);
+    
+    /**
+     * Get profile payment sankey diagram
+     */
+    Mono<Result<com.hyperswitch.common.dto.SankeyResponse, PaymentError>> getProfileSankey(
+            String profileId,
+            com.hyperswitch.common.dto.SankeyRequest request);
+    
+    /**
+     * Get auth event sankey diagram
+     */
+    Mono<Result<com.hyperswitch.common.dto.SankeyResponse, PaymentError>> getAuthEventSankey(
+            String merchantId,
+            com.hyperswitch.common.dto.SankeyRequest request);
+    
+    /**
+     * Get merchant auth event sankey diagram
+     */
+    Mono<Result<com.hyperswitch.common.dto.SankeyResponse, PaymentError>> getMerchantAuthEventSankey(
+            String merchantId,
+            com.hyperswitch.common.dto.SankeyRequest request);
+    
+    /**
+     * Get org auth event sankey diagram
+     */
+    Mono<Result<com.hyperswitch.common.dto.SankeyResponse, PaymentError>> getOrgAuthEventSankey(
+            String orgId,
+            com.hyperswitch.common.dto.SankeyRequest request);
+    
+    /**
+     * Get profile auth event sankey diagram
+     */
+    Mono<Result<com.hyperswitch.common.dto.SankeyResponse, PaymentError>> getProfileAuthEventSankey(
+            String profileId,
+            com.hyperswitch.common.dto.SankeyRequest request);
 }
 

@@ -20,7 +20,10 @@ import com.hyperswitch.common.dto.DisputeMetricsRequest;
 import com.hyperswitch.common.dto.DisputeMetricsResponse;
 import com.hyperswitch.common.dto.ApiEventMetricsRequest;
 import com.hyperswitch.common.dto.ApiEventMetricsResponse;
+import com.hyperswitch.common.dto.SankeyRequest;
+import com.hyperswitch.common.dto.SankeyResponse;
 import com.hyperswitch.core.analytics.AnalyticsService;
+import com.hyperswitch.web.controller.PaymentException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -1088,6 +1091,246 @@ public class AnalyticsMetricsController {
             @RequestHeader("profile_id") String profileId,
             @RequestBody ApiEventMetricsRequest request) {
         return analyticsService.getProfileApiEventMetrics(profileId, request)
+            .map(result -> {
+                if (result.isOk()) {
+                    return ResponseEntity.ok(result.unwrap());
+                } else {
+                    throw new PaymentException(result.unwrapErr());
+                }
+            });
+    }
+    
+    /**
+     * Get payment sankey diagram
+     * POST /api/analytics/v1/metrics/sankey
+     */
+    @PostMapping("/v1/metrics/sankey")
+    @Operation(
+        summary = "Get payment sankey diagram",
+        description = "Retrieves payment flow sankey diagram data"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Payment sankey diagram retrieved successfully",
+            content = @Content(schema = @Schema(implementation = SankeyResponse.class))
+        ),
+        @ApiResponse(responseCode = "400", description = "Invalid request")
+    })
+    public Mono<ResponseEntity<SankeyResponse>> getSankey(
+            @RequestHeader(value = "merchant_id", required = false) String merchantId,
+            @RequestBody SankeyRequest request) {
+        return analyticsService.getSankey(merchantId != null ? merchantId : "default", request)
+            .map(result -> {
+                if (result.isOk()) {
+                    return ResponseEntity.ok(result.unwrap());
+                } else {
+                    throw new PaymentException(result.unwrapErr());
+                }
+            });
+    }
+    
+    /**
+     * Get merchant payment sankey diagram
+     * POST /api/analytics/v1/merchant/metrics/sankey
+     */
+    @PostMapping("/v1/merchant/metrics/sankey")
+    @Operation(
+        summary = "Get merchant payment sankey diagram",
+        description = "Retrieves payment flow sankey diagram data for a specific merchant"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Merchant payment sankey diagram retrieved successfully",
+            content = @Content(schema = @Schema(implementation = SankeyResponse.class))
+        ),
+        @ApiResponse(responseCode = "400", description = "Invalid request")
+    })
+    public Mono<ResponseEntity<SankeyResponse>> getMerchantSankey(
+            @RequestHeader("merchant_id") String merchantId,
+            @RequestBody SankeyRequest request) {
+        return analyticsService.getMerchantSankey(merchantId, request)
+            .map(result -> {
+                if (result.isOk()) {
+                    return ResponseEntity.ok(result.unwrap());
+                } else {
+                    throw new PaymentException(result.unwrapErr());
+                }
+            });
+    }
+    
+    /**
+     * Get org payment sankey diagram
+     * POST /api/analytics/v1/org/metrics/sankey
+     */
+    @PostMapping("/v1/org/metrics/sankey")
+    @Operation(
+        summary = "Get org payment sankey diagram",
+        description = "Retrieves payment flow sankey diagram data for an organization"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Org payment sankey diagram retrieved successfully",
+            content = @Content(schema = @Schema(implementation = SankeyResponse.class))
+        ),
+        @ApiResponse(responseCode = "400", description = "Invalid request")
+    })
+    public Mono<ResponseEntity<SankeyResponse>> getOrgSankey(
+            @RequestHeader("org_id") String orgId,
+            @RequestBody SankeyRequest request) {
+        return analyticsService.getOrgSankey(orgId, request)
+            .map(result -> {
+                if (result.isOk()) {
+                    return ResponseEntity.ok(result.unwrap());
+                } else {
+                    throw new PaymentException(result.unwrapErr());
+                }
+            });
+    }
+    
+    /**
+     * Get profile payment sankey diagram
+     * POST /api/analytics/v1/profile/metrics/sankey
+     */
+    @PostMapping("/v1/profile/metrics/sankey")
+    @Operation(
+        summary = "Get profile payment sankey diagram",
+        description = "Retrieves payment flow sankey diagram data for a specific profile"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Profile payment sankey diagram retrieved successfully",
+            content = @Content(schema = @Schema(implementation = SankeyResponse.class))
+        ),
+        @ApiResponse(responseCode = "400", description = "Invalid request")
+    })
+    public Mono<ResponseEntity<SankeyResponse>> getProfileSankey(
+            @RequestHeader("profile_id") String profileId,
+            @RequestBody SankeyRequest request) {
+        return analyticsService.getProfileSankey(profileId, request)
+            .map(result -> {
+                if (result.isOk()) {
+                    return ResponseEntity.ok(result.unwrap());
+                } else {
+                    throw new PaymentException(result.unwrapErr());
+                }
+            });
+    }
+    
+    /**
+     * Get auth event sankey diagram
+     * POST /api/analytics/v1/metrics/auth_events/sankey
+     */
+    @PostMapping("/v1/metrics/auth_events/sankey")
+    @Operation(
+        summary = "Get auth event sankey diagram",
+        description = "Retrieves authentication event flow sankey diagram data"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Auth event sankey diagram retrieved successfully",
+            content = @Content(schema = @Schema(implementation = SankeyResponse.class))
+        ),
+        @ApiResponse(responseCode = "400", description = "Invalid request")
+    })
+    public Mono<ResponseEntity<SankeyResponse>> getAuthEventSankey(
+            @RequestHeader(value = "merchant_id", required = false) String merchantId,
+            @RequestBody SankeyRequest request) {
+        return analyticsService.getAuthEventSankey(merchantId != null ? merchantId : "default", request)
+            .map(result -> {
+                if (result.isOk()) {
+                    return ResponseEntity.ok(result.unwrap());
+                } else {
+                    throw new PaymentException(result.unwrapErr());
+                }
+            });
+    }
+    
+    /**
+     * Get merchant auth event sankey diagram
+     * POST /api/analytics/v1/merchant/metrics/auth_events/sankey
+     */
+    @PostMapping("/v1/merchant/metrics/auth_events/sankey")
+    @Operation(
+        summary = "Get merchant auth event sankey diagram",
+        description = "Retrieves authentication event flow sankey diagram data for a specific merchant"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Merchant auth event sankey diagram retrieved successfully",
+            content = @Content(schema = @Schema(implementation = SankeyResponse.class))
+        ),
+        @ApiResponse(responseCode = "400", description = "Invalid request")
+    })
+    public Mono<ResponseEntity<SankeyResponse>> getMerchantAuthEventSankey(
+            @RequestHeader("merchant_id") String merchantId,
+            @RequestBody SankeyRequest request) {
+        return analyticsService.getMerchantAuthEventSankey(merchantId, request)
+            .map(result -> {
+                if (result.isOk()) {
+                    return ResponseEntity.ok(result.unwrap());
+                } else {
+                    throw new PaymentException(result.unwrapErr());
+                }
+            });
+    }
+    
+    /**
+     * Get org auth event sankey diagram
+     * POST /api/analytics/v1/org/metrics/auth_events/sankey
+     */
+    @PostMapping("/v1/org/metrics/auth_events/sankey")
+    @Operation(
+        summary = "Get org auth event sankey diagram",
+        description = "Retrieves authentication event flow sankey diagram data for an organization"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Org auth event sankey diagram retrieved successfully",
+            content = @Content(schema = @Schema(implementation = SankeyResponse.class))
+        ),
+        @ApiResponse(responseCode = "400", description = "Invalid request")
+    })
+    public Mono<ResponseEntity<SankeyResponse>> getOrgAuthEventSankey(
+            @RequestHeader("org_id") String orgId,
+            @RequestBody SankeyRequest request) {
+        return analyticsService.getOrgAuthEventSankey(orgId, request)
+            .map(result -> {
+                if (result.isOk()) {
+                    return ResponseEntity.ok(result.unwrap());
+                } else {
+                    throw new PaymentException(result.unwrapErr());
+                }
+            });
+    }
+    
+    /**
+     * Get profile auth event sankey diagram
+     * POST /api/analytics/v1/profile/metrics/auth_events/sankey
+     */
+    @PostMapping("/v1/profile/metrics/auth_events/sankey")
+    @Operation(
+        summary = "Get profile auth event sankey diagram",
+        description = "Retrieves authentication event flow sankey diagram data for a specific profile"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Profile auth event sankey diagram retrieved successfully",
+            content = @Content(schema = @Schema(implementation = SankeyResponse.class))
+        ),
+        @ApiResponse(responseCode = "400", description = "Invalid request")
+    })
+    public Mono<ResponseEntity<SankeyResponse>> getProfileAuthEventSankey(
+            @RequestHeader("profile_id") String profileId,
+            @RequestBody SankeyRequest request) {
+        return analyticsService.getProfileAuthEventSankey(profileId, request)
             .map(result -> {
                 if (result.isOk()) {
                     return ResponseEntity.ok(result.unwrap());

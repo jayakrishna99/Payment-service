@@ -39,6 +39,31 @@ import com.hyperswitch.common.dto.DisputeFiltersRequest;
 import com.hyperswitch.common.dto.DisputeFiltersResponse;
 import com.hyperswitch.common.dto.ApiEventFiltersRequest;
 import com.hyperswitch.common.dto.ApiEventFiltersResponse;
+import com.hyperswitch.common.dto.DisputeReportRequest;
+import com.hyperswitch.common.dto.DisputeReportResponse;
+import com.hyperswitch.common.dto.RefundReportRequest;
+import com.hyperswitch.common.dto.RefundReportResponse;
+import com.hyperswitch.common.dto.PaymentReportRequest;
+import com.hyperswitch.common.dto.PaymentReportResponse;
+import com.hyperswitch.common.dto.PayoutReportRequest;
+import com.hyperswitch.common.dto.PayoutReportResponse;
+import com.hyperswitch.common.dto.AuthenticationReportRequest;
+import com.hyperswitch.common.dto.AuthenticationReportResponse;
+import com.hyperswitch.common.dto.ApiEventLogsRequest;
+import com.hyperswitch.common.dto.ApiEventLogsResponse;
+import com.hyperswitch.common.dto.SdkEventLogsRequest;
+import com.hyperswitch.common.dto.SdkEventLogsResponse;
+import com.hyperswitch.common.dto.ConnectorEventLogsRequest;
+import com.hyperswitch.common.dto.ConnectorEventLogsResponse;
+import com.hyperswitch.common.dto.RoutingEventLogsRequest;
+import com.hyperswitch.common.dto.RoutingEventLogsResponse;
+import com.hyperswitch.common.dto.OutgoingWebhookEventLogsRequest;
+import com.hyperswitch.common.dto.OutgoingWebhookEventLogsResponse;
+import com.hyperswitch.common.dto.SankeyRequest;
+import com.hyperswitch.common.dto.SankeyResponse;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.UUID;
 import com.hyperswitch.common.errors.PaymentError;
 import com.hyperswitch.common.types.AnalyticsDomain;
 import com.hyperswitch.common.types.Result;
@@ -1799,6 +1824,787 @@ public class AnalyticsServiceImpl implements AnalyticsService {
             log.error("Error getting profile API event filters: {}", error.getMessage(), error);
             return Mono.just(Result.err(PaymentError.of("PROFILE_API_EVENT_FILTERS_RETRIEVAL_FAILED",
                 "Failed to get profile API event filters: " + error.getMessage())));
+        });
+    }
+    
+    @Override
+    public Mono<Result<DisputeReportResponse, PaymentError>> generateDisputeReport(
+            String merchantId,
+            DisputeReportRequest request) {
+        log.info("Generating dispute report for merchant: {}", merchantId);
+        
+        return Mono.fromCallable(() -> {
+            DisputeReportResponse response = new DisputeReportResponse();
+            response.setReportId(UUID.randomUUID().toString());
+            response.setStatus("GENERATING");
+            response.setFormat(request.getFormat() != null ? request.getFormat() : "CSV");
+            response.setGeneratedAt(Instant.now().toString());
+            response.setExpiresAt(Instant.now().plus(7, ChronoUnit.DAYS).toString());
+            response.setRowCount(0L);
+            
+            // In production, this would trigger async report generation
+            // For now, return a placeholder response
+            
+            return Result.<DisputeReportResponse, PaymentError>ok(response);
+        })
+        .onErrorResume(error -> {
+            log.error("Error generating dispute report: {}", error.getMessage(), error);
+            return Mono.just(Result.err(PaymentError.of("DISPUTE_REPORT_GENERATION_FAILED",
+                "Failed to generate dispute report: " + error.getMessage())));
+        });
+    }
+    
+    @Override
+    public Mono<Result<DisputeReportResponse, PaymentError>> generateMerchantDisputeReport(
+            String merchantId,
+            DisputeReportRequest request) {
+        log.info("Generating merchant dispute report for merchant: {}", merchantId);
+        return generateDisputeReport(merchantId, request);
+    }
+    
+    @Override
+    public Mono<Result<DisputeReportResponse, PaymentError>> generateOrgDisputeReport(
+            String orgId,
+            DisputeReportRequest request) {
+        log.info("Generating org dispute report for org: {}", orgId);
+        
+        return Mono.fromCallable(() -> {
+            DisputeReportResponse response = new DisputeReportResponse();
+            response.setReportId(UUID.randomUUID().toString());
+            response.setStatus("GENERATING");
+            response.setFormat(request.getFormat() != null ? request.getFormat() : "CSV");
+            response.setGeneratedAt(Instant.now().toString());
+            response.setExpiresAt(Instant.now().plus(7, ChronoUnit.DAYS).toString());
+            response.setRowCount(0L);
+            
+            return Result.<DisputeReportResponse, PaymentError>ok(response);
+        })
+        .onErrorResume(error -> {
+            log.error("Error generating org dispute report: {}", error.getMessage(), error);
+            return Mono.just(Result.err(PaymentError.of("ORG_DISPUTE_REPORT_GENERATION_FAILED",
+                "Failed to generate org dispute report: " + error.getMessage())));
+        });
+    }
+    
+    @Override
+    public Mono<Result<DisputeReportResponse, PaymentError>> generateProfileDisputeReport(
+            String profileId,
+            DisputeReportRequest request) {
+        log.info("Generating profile dispute report for profile: {}", profileId);
+        
+        return Mono.fromCallable(() -> {
+            DisputeReportResponse response = new DisputeReportResponse();
+            response.setReportId(UUID.randomUUID().toString());
+            response.setStatus("GENERATING");
+            response.setFormat(request.getFormat() != null ? request.getFormat() : "CSV");
+            response.setGeneratedAt(Instant.now().toString());
+            response.setExpiresAt(Instant.now().plus(7, ChronoUnit.DAYS).toString());
+            response.setRowCount(0L);
+            
+            return Result.<DisputeReportResponse, PaymentError>ok(response);
+        })
+        .onErrorResume(error -> {
+            log.error("Error generating profile dispute report: {}", error.getMessage(), error);
+            return Mono.just(Result.err(PaymentError.of("PROFILE_DISPUTE_REPORT_GENERATION_FAILED",
+                "Failed to generate profile dispute report: " + error.getMessage())));
+        });
+    }
+    
+    @Override
+    public Mono<Result<RefundReportResponse, PaymentError>> generateRefundReport(
+            String merchantId,
+            RefundReportRequest request) {
+        log.info("Generating refund report for merchant: {}", merchantId);
+        
+        return Mono.fromCallable(() -> {
+            RefundReportResponse response = new RefundReportResponse();
+            response.setReportId(UUID.randomUUID().toString());
+            response.setStatus("GENERATING");
+            response.setFormat(request.getFormat() != null ? request.getFormat() : "CSV");
+            response.setGeneratedAt(Instant.now().toString());
+            response.setExpiresAt(Instant.now().plus(7, ChronoUnit.DAYS).toString());
+            response.setRowCount(0L);
+            
+            return Result.<RefundReportResponse, PaymentError>ok(response);
+        })
+        .onErrorResume(error -> {
+            log.error("Error generating refund report: {}", error.getMessage(), error);
+            return Mono.just(Result.err(PaymentError.of("REFUND_REPORT_GENERATION_FAILED",
+                "Failed to generate refund report: " + error.getMessage())));
+        });
+    }
+    
+    @Override
+    public Mono<Result<RefundReportResponse, PaymentError>> generateMerchantRefundReport(
+            String merchantId,
+            RefundReportRequest request) {
+        log.info("Generating merchant refund report for merchant: {}", merchantId);
+        return generateRefundReport(merchantId, request);
+    }
+    
+    @Override
+    public Mono<Result<RefundReportResponse, PaymentError>> generateOrgRefundReport(
+            String orgId,
+            RefundReportRequest request) {
+        log.info("Generating org refund report for org: {}", orgId);
+        
+        return Mono.fromCallable(() -> {
+            RefundReportResponse response = new RefundReportResponse();
+            response.setReportId(UUID.randomUUID().toString());
+            response.setStatus("GENERATING");
+            response.setFormat(request.getFormat() != null ? request.getFormat() : "CSV");
+            response.setGeneratedAt(Instant.now().toString());
+            response.setExpiresAt(Instant.now().plus(7, ChronoUnit.DAYS).toString());
+            response.setRowCount(0L);
+            
+            return Result.<RefundReportResponse, PaymentError>ok(response);
+        })
+        .onErrorResume(error -> {
+            log.error("Error generating org refund report: {}", error.getMessage(), error);
+            return Mono.just(Result.err(PaymentError.of("ORG_REFUND_REPORT_GENERATION_FAILED",
+                "Failed to generate org refund report: " + error.getMessage())));
+        });
+    }
+    
+    @Override
+    public Mono<Result<RefundReportResponse, PaymentError>> generateProfileRefundReport(
+            String profileId,
+            RefundReportRequest request) {
+        log.info("Generating profile refund report for profile: {}", profileId);
+        
+        return Mono.fromCallable(() -> {
+            RefundReportResponse response = new RefundReportResponse();
+            response.setReportId(UUID.randomUUID().toString());
+            response.setStatus("GENERATING");
+            response.setFormat(request.getFormat() != null ? request.getFormat() : "CSV");
+            response.setGeneratedAt(Instant.now().toString());
+            response.setExpiresAt(Instant.now().plus(7, ChronoUnit.DAYS).toString());
+            response.setRowCount(0L);
+            
+            return Result.<RefundReportResponse, PaymentError>ok(response);
+        })
+        .onErrorResume(error -> {
+            log.error("Error generating profile refund report: {}", error.getMessage(), error);
+            return Mono.just(Result.err(PaymentError.of("PROFILE_REFUND_REPORT_GENERATION_FAILED",
+                "Failed to generate profile refund report: " + error.getMessage())));
+        });
+    }
+    
+    @Override
+    public Mono<Result<PaymentReportResponse, PaymentError>> generatePaymentReport(
+            String merchantId,
+            PaymentReportRequest request) {
+        log.info("Generating payment report for merchant: {}", merchantId);
+        
+        return Mono.fromCallable(() -> {
+            PaymentReportResponse response = new PaymentReportResponse();
+            response.setReportId(UUID.randomUUID().toString());
+            response.setStatus("GENERATING");
+            response.setFormat(request.getFormat() != null ? request.getFormat() : "CSV");
+            response.setGeneratedAt(Instant.now().toString());
+            response.setExpiresAt(Instant.now().plus(7, ChronoUnit.DAYS).toString());
+            response.setRowCount(0L);
+            
+            return Result.<PaymentReportResponse, PaymentError>ok(response);
+        })
+        .onErrorResume(error -> {
+            log.error("Error generating payment report: {}", error.getMessage(), error);
+            return Mono.just(Result.err(PaymentError.of("PAYMENT_REPORT_GENERATION_FAILED",
+                "Failed to generate payment report: " + error.getMessage())));
+        });
+    }
+    
+    @Override
+    public Mono<Result<PaymentReportResponse, PaymentError>> generateMerchantPaymentReport(
+            String merchantId,
+            PaymentReportRequest request) {
+        log.info("Generating merchant payment report for merchant: {}", merchantId);
+        return generatePaymentReport(merchantId, request);
+    }
+    
+    @Override
+    public Mono<Result<PaymentReportResponse, PaymentError>> generateOrgPaymentReport(
+            String orgId,
+            PaymentReportRequest request) {
+        log.info("Generating org payment report for org: {}", orgId);
+        
+        return Mono.fromCallable(() -> {
+            PaymentReportResponse response = new PaymentReportResponse();
+            response.setReportId(UUID.randomUUID().toString());
+            response.setStatus("GENERATING");
+            response.setFormat(request.getFormat() != null ? request.getFormat() : "CSV");
+            response.setGeneratedAt(Instant.now().toString());
+            response.setExpiresAt(Instant.now().plus(7, ChronoUnit.DAYS).toString());
+            response.setRowCount(0L);
+            
+            return Result.<PaymentReportResponse, PaymentError>ok(response);
+        })
+        .onErrorResume(error -> {
+            log.error("Error generating org payment report: {}", error.getMessage(), error);
+            return Mono.just(Result.err(PaymentError.of("ORG_PAYMENT_REPORT_GENERATION_FAILED",
+                "Failed to generate org payment report: " + error.getMessage())));
+        });
+    }
+    
+    @Override
+    public Mono<Result<PaymentReportResponse, PaymentError>> generateProfilePaymentReport(
+            String profileId,
+            PaymentReportRequest request) {
+        log.info("Generating profile payment report for profile: {}", profileId);
+        
+        return Mono.fromCallable(() -> {
+            PaymentReportResponse response = new PaymentReportResponse();
+            response.setReportId(UUID.randomUUID().toString());
+            response.setStatus("GENERATING");
+            response.setFormat(request.getFormat() != null ? request.getFormat() : "CSV");
+            response.setGeneratedAt(Instant.now().toString());
+            response.setExpiresAt(Instant.now().plus(7, ChronoUnit.DAYS).toString());
+            response.setRowCount(0L);
+            
+            return Result.<PaymentReportResponse, PaymentError>ok(response);
+        })
+        .onErrorResume(error -> {
+            log.error("Error generating profile payment report: {}", error.getMessage(), error);
+            return Mono.just(Result.err(PaymentError.of("PROFILE_PAYMENT_REPORT_GENERATION_FAILED",
+                "Failed to generate profile payment report: " + error.getMessage())));
+        });
+    }
+    
+    @Override
+    public Mono<Result<PayoutReportResponse, PaymentError>> generatePayoutReport(
+            String merchantId,
+            PayoutReportRequest request) {
+        log.info("Generating payout report for merchant: {}", merchantId);
+        
+        return Mono.fromCallable(() -> {
+            PayoutReportResponse response = new PayoutReportResponse();
+            response.setReportId(UUID.randomUUID().toString());
+            response.setStatus("GENERATING");
+            response.setFormat(request.getFormat() != null ? request.getFormat() : "CSV");
+            response.setGeneratedAt(Instant.now().toString());
+            response.setExpiresAt(Instant.now().plus(7, ChronoUnit.DAYS).toString());
+            response.setRowCount(0L);
+            
+            return Result.<PayoutReportResponse, PaymentError>ok(response);
+        })
+        .onErrorResume(error -> {
+            log.error("Error generating payout report: {}", error.getMessage(), error);
+            return Mono.just(Result.err(PaymentError.of("PAYOUT_REPORT_GENERATION_FAILED",
+                "Failed to generate payout report: " + error.getMessage())));
+        });
+    }
+    
+    @Override
+    public Mono<Result<PayoutReportResponse, PaymentError>> generateMerchantPayoutReport(
+            String merchantId,
+            PayoutReportRequest request) {
+        log.info("Generating merchant payout report for merchant: {}", merchantId);
+        return generatePayoutReport(merchantId, request);
+    }
+    
+    @Override
+    public Mono<Result<PayoutReportResponse, PaymentError>> generateOrgPayoutReport(
+            String orgId,
+            PayoutReportRequest request) {
+        log.info("Generating org payout report for org: {}", orgId);
+        
+        return Mono.fromCallable(() -> {
+            PayoutReportResponse response = new PayoutReportResponse();
+            response.setReportId(UUID.randomUUID().toString());
+            response.setStatus("GENERATING");
+            response.setFormat(request.getFormat() != null ? request.getFormat() : "CSV");
+            response.setGeneratedAt(Instant.now().toString());
+            response.setExpiresAt(Instant.now().plus(7, ChronoUnit.DAYS).toString());
+            response.setRowCount(0L);
+            
+            return Result.<PayoutReportResponse, PaymentError>ok(response);
+        })
+        .onErrorResume(error -> {
+            log.error("Error generating org payout report: {}", error.getMessage(), error);
+            return Mono.just(Result.err(PaymentError.of("ORG_PAYOUT_REPORT_GENERATION_FAILED",
+                "Failed to generate org payout report: " + error.getMessage())));
+        });
+    }
+    
+    @Override
+    public Mono<Result<PayoutReportResponse, PaymentError>> generateProfilePayoutReport(
+            String profileId,
+            PayoutReportRequest request) {
+        log.info("Generating profile payout report for profile: {}", profileId);
+        
+        return Mono.fromCallable(() -> {
+            PayoutReportResponse response = new PayoutReportResponse();
+            response.setReportId(UUID.randomUUID().toString());
+            response.setStatus("GENERATING");
+            response.setFormat(request.getFormat() != null ? request.getFormat() : "CSV");
+            response.setGeneratedAt(Instant.now().toString());
+            response.setExpiresAt(Instant.now().plus(7, ChronoUnit.DAYS).toString());
+            response.setRowCount(0L);
+            
+            return Result.<PayoutReportResponse, PaymentError>ok(response);
+        })
+        .onErrorResume(error -> {
+            log.error("Error generating profile payout report: {}", error.getMessage(), error);
+            return Mono.just(Result.err(PaymentError.of("PROFILE_PAYOUT_REPORT_GENERATION_FAILED",
+                "Failed to generate profile payout report: " + error.getMessage())));
+        });
+    }
+    
+    @Override
+    public Mono<Result<AuthenticationReportResponse, PaymentError>> generateAuthenticationReport(
+            String merchantId,
+            AuthenticationReportRequest request) {
+        log.info("Generating authentication report for merchant: {}", merchantId);
+        
+        return Mono.fromCallable(() -> {
+            AuthenticationReportResponse response = new AuthenticationReportResponse();
+            response.setReportId(UUID.randomUUID().toString());
+            response.setStatus("GENERATING");
+            response.setFormat(request.getFormat() != null ? request.getFormat() : "CSV");
+            response.setGeneratedAt(Instant.now().toString());
+            response.setExpiresAt(Instant.now().plus(7, ChronoUnit.DAYS).toString());
+            response.setRowCount(0L);
+            
+            return Result.<AuthenticationReportResponse, PaymentError>ok(response);
+        })
+        .onErrorResume(error -> {
+            log.error("Error generating authentication report: {}", error.getMessage(), error);
+            return Mono.just(Result.err(PaymentError.of("AUTHENTICATION_REPORT_GENERATION_FAILED",
+                "Failed to generate authentication report: " + error.getMessage())));
+        });
+    }
+    
+    @Override
+    public Mono<Result<AuthenticationReportResponse, PaymentError>> generateMerchantAuthenticationReport(
+            String merchantId,
+            AuthenticationReportRequest request) {
+        log.info("Generating merchant authentication report for merchant: {}", merchantId);
+        return generateAuthenticationReport(merchantId, request);
+    }
+    
+    @Override
+    public Mono<Result<AuthenticationReportResponse, PaymentError>> generateOrgAuthenticationReport(
+            String orgId,
+            AuthenticationReportRequest request) {
+        log.info("Generating org authentication report for org: {}", orgId);
+        
+        return Mono.fromCallable(() -> {
+            AuthenticationReportResponse response = new AuthenticationReportResponse();
+            response.setReportId(UUID.randomUUID().toString());
+            response.setStatus("GENERATING");
+            response.setFormat(request.getFormat() != null ? request.getFormat() : "CSV");
+            response.setGeneratedAt(Instant.now().toString());
+            response.setExpiresAt(Instant.now().plus(7, ChronoUnit.DAYS).toString());
+            response.setRowCount(0L);
+            
+            return Result.<AuthenticationReportResponse, PaymentError>ok(response);
+        })
+        .onErrorResume(error -> {
+            log.error("Error generating org authentication report: {}", error.getMessage(), error);
+            return Mono.just(Result.err(PaymentError.of("ORG_AUTHENTICATION_REPORT_GENERATION_FAILED",
+                "Failed to generate org authentication report: " + error.getMessage())));
+        });
+    }
+    
+    @Override
+    public Mono<Result<AuthenticationReportResponse, PaymentError>> generateProfileAuthenticationReport(
+            String profileId,
+            AuthenticationReportRequest request) {
+        log.info("Generating profile authentication report for profile: {}", profileId);
+        
+        return Mono.fromCallable(() -> {
+            AuthenticationReportResponse response = new AuthenticationReportResponse();
+            response.setReportId(UUID.randomUUID().toString());
+            response.setStatus("GENERATING");
+            response.setFormat(request.getFormat() != null ? request.getFormat() : "CSV");
+            response.setGeneratedAt(Instant.now().toString());
+            response.setExpiresAt(Instant.now().plus(7, ChronoUnit.DAYS).toString());
+            response.setRowCount(0L);
+            
+            return Result.<AuthenticationReportResponse, PaymentError>ok(response);
+        })
+        .onErrorResume(error -> {
+            log.error("Error generating profile authentication report: {}", error.getMessage(), error);
+            return Mono.just(Result.err(PaymentError.of("PROFILE_AUTHENTICATION_REPORT_GENERATION_FAILED",
+                "Failed to generate profile authentication report: " + error.getMessage())));
+        });
+    }
+    
+    @Override
+    public Mono<Result<ApiEventLogsResponse, PaymentError>> getApiEventLogs(
+            String merchantId,
+            ApiEventLogsRequest request) {
+        log.info("Getting API event logs for merchant: {}", merchantId);
+        
+        return Mono.fromCallable(() -> {
+            ApiEventLogsResponse response = new ApiEventLogsResponse();
+            response.setEvents(new ArrayList<>());
+            response.setTotalCount(0L);
+            
+            // In production, this would query the event log database/stream
+            // For now, return empty response
+            
+            return Result.<ApiEventLogsResponse, PaymentError>ok(response);
+        })
+        .onErrorResume(error -> {
+            log.error("Error getting API event logs: {}", error.getMessage(), error);
+            return Mono.just(Result.err(PaymentError.of("API_EVENT_LOGS_RETRIEVAL_FAILED",
+                "Failed to get API event logs: " + error.getMessage())));
+        });
+    }
+    
+    @Override
+    public Mono<Result<ApiEventLogsResponse, PaymentError>> getProfileApiEventLogs(
+            String profileId,
+            ApiEventLogsRequest request) {
+        log.info("Getting profile API event logs for profile: {}", profileId);
+        
+        return Mono.fromCallable(() -> {
+            ApiEventLogsResponse response = new ApiEventLogsResponse();
+            response.setEvents(new ArrayList<>());
+            response.setTotalCount(0L);
+            
+            // In production, this would filter by profile ID
+            // For now, return empty response
+            
+            return Result.<ApiEventLogsResponse, PaymentError>ok(response);
+        })
+        .onErrorResume(error -> {
+            log.error("Error getting profile API event logs: {}", error.getMessage(), error);
+            return Mono.just(Result.err(PaymentError.of("PROFILE_API_EVENT_LOGS_RETRIEVAL_FAILED",
+                "Failed to get profile API event logs: " + error.getMessage())));
+        });
+    }
+    
+    @Override
+    public Mono<Result<SdkEventLogsResponse, PaymentError>> getSdkEventLogs(
+            String merchantId,
+            SdkEventLogsRequest request) {
+        log.info("Getting SDK event logs for merchant: {}", merchantId);
+        
+        return Mono.fromCallable(() -> {
+            SdkEventLogsResponse response = new SdkEventLogsResponse();
+            response.setEvents(new ArrayList<>());
+            response.setTotalCount(0L);
+            
+            // In production, this would query the SDK event log database/stream
+            // For now, return empty response
+            
+            return Result.<SdkEventLogsResponse, PaymentError>ok(response);
+        })
+        .onErrorResume(error -> {
+            log.error("Error getting SDK event logs: {}", error.getMessage(), error);
+            return Mono.just(Result.err(PaymentError.of("SDK_EVENT_LOGS_RETRIEVAL_FAILED",
+                "Failed to get SDK event logs: " + error.getMessage())));
+        });
+    }
+    
+    @Override
+    public Mono<Result<SdkEventLogsResponse, PaymentError>> getProfileSdkEventLogs(
+            String profileId,
+            SdkEventLogsRequest request) {
+        log.info("Getting profile SDK event logs for profile: {}", profileId);
+        
+        return Mono.fromCallable(() -> {
+            SdkEventLogsResponse response = new SdkEventLogsResponse();
+            response.setEvents(new ArrayList<>());
+            response.setTotalCount(0L);
+            
+            // In production, this would filter by profile ID
+            // For now, return empty response
+            
+            return Result.<SdkEventLogsResponse, PaymentError>ok(response);
+        })
+        .onErrorResume(error -> {
+            log.error("Error getting profile SDK event logs: {}", error.getMessage(), error);
+            return Mono.just(Result.err(PaymentError.of("PROFILE_SDK_EVENT_LOGS_RETRIEVAL_FAILED",
+                "Failed to get profile SDK event logs: " + error.getMessage())));
+        });
+    }
+    
+    @Override
+    public Mono<Result<ConnectorEventLogsResponse, PaymentError>> getConnectorEventLogs(
+            String merchantId,
+            ConnectorEventLogsRequest request) {
+        log.info("Getting connector event logs for merchant: {}", merchantId);
+        
+        return Mono.fromCallable(() -> {
+            ConnectorEventLogsResponse response = new ConnectorEventLogsResponse();
+            response.setEvents(new ArrayList<>());
+            response.setTotalCount(0L);
+            
+            // In production, this would query the connector event log database/stream
+            // For now, return empty response
+            
+            return Result.<ConnectorEventLogsResponse, PaymentError>ok(response);
+        })
+        .onErrorResume(error -> {
+            log.error("Error getting connector event logs: {}", error.getMessage(), error);
+            return Mono.just(Result.err(PaymentError.of("CONNECTOR_EVENT_LOGS_RETRIEVAL_FAILED",
+                "Failed to get connector event logs: " + error.getMessage())));
+        });
+    }
+    
+    @Override
+    public Mono<Result<ConnectorEventLogsResponse, PaymentError>> getProfileConnectorEventLogs(
+            String profileId,
+            ConnectorEventLogsRequest request) {
+        log.info("Getting profile connector event logs for profile: {}", profileId);
+        
+        return Mono.fromCallable(() -> {
+            ConnectorEventLogsResponse response = new ConnectorEventLogsResponse();
+            response.setEvents(new ArrayList<>());
+            response.setTotalCount(0L);
+            
+            // In production, this would filter by profile ID
+            // For now, return empty response
+            
+            return Result.<ConnectorEventLogsResponse, PaymentError>ok(response);
+        })
+        .onErrorResume(error -> {
+            log.error("Error getting profile connector event logs: {}", error.getMessage(), error);
+            return Mono.just(Result.err(PaymentError.of("PROFILE_CONNECTOR_EVENT_LOGS_RETRIEVAL_FAILED",
+                "Failed to get profile connector event logs: " + error.getMessage())));
+        });
+    }
+    
+    @Override
+    public Mono<Result<RoutingEventLogsResponse, PaymentError>> getRoutingEventLogs(
+            String merchantId,
+            RoutingEventLogsRequest request) {
+        log.info("Getting routing event logs for merchant: {}", merchantId);
+        
+        return Mono.fromCallable(() -> {
+            RoutingEventLogsResponse response = new RoutingEventLogsResponse();
+            response.setEvents(new ArrayList<>());
+            response.setTotalCount(0L);
+            
+            // In production, this would query the routing event log database/stream
+            // For now, return empty response
+            
+            return Result.<RoutingEventLogsResponse, PaymentError>ok(response);
+        })
+        .onErrorResume(error -> {
+            log.error("Error getting routing event logs: {}", error.getMessage(), error);
+            return Mono.just(Result.err(PaymentError.of("ROUTING_EVENT_LOGS_RETRIEVAL_FAILED",
+                "Failed to get routing event logs: " + error.getMessage())));
+        });
+    }
+    
+    @Override
+    public Mono<Result<RoutingEventLogsResponse, PaymentError>> getProfileRoutingEventLogs(
+            String profileId,
+            RoutingEventLogsRequest request) {
+        log.info("Getting profile routing event logs for profile: {}", profileId);
+        
+        return Mono.fromCallable(() -> {
+            RoutingEventLogsResponse response = new RoutingEventLogsResponse();
+            response.setEvents(new ArrayList<>());
+            response.setTotalCount(0L);
+            
+            // In production, this would filter by profile ID
+            // For now, return empty response
+            
+            return Result.<RoutingEventLogsResponse, PaymentError>ok(response);
+        })
+        .onErrorResume(error -> {
+            log.error("Error getting profile routing event logs: {}", error.getMessage(), error);
+            return Mono.just(Result.err(PaymentError.of("PROFILE_ROUTING_EVENT_LOGS_RETRIEVAL_FAILED",
+                "Failed to get profile routing event logs: " + error.getMessage())));
+        });
+    }
+    
+    @Override
+    public Mono<Result<OutgoingWebhookEventLogsResponse, PaymentError>> getOutgoingWebhookEventLogs(
+            String merchantId,
+            OutgoingWebhookEventLogsRequest request) {
+        log.info("Getting outgoing webhook event logs for merchant: {}", merchantId);
+        
+        return Mono.fromCallable(() -> {
+            OutgoingWebhookEventLogsResponse response = new OutgoingWebhookEventLogsResponse();
+            response.setEvents(new ArrayList<>());
+            response.setTotalCount(0L);
+            
+            // In production, this would query the webhook event log database/stream
+            // For now, return empty response
+            
+            return Result.<OutgoingWebhookEventLogsResponse, PaymentError>ok(response);
+        })
+        .onErrorResume(error -> {
+            log.error("Error getting outgoing webhook event logs: {}", error.getMessage(), error);
+            return Mono.just(Result.err(PaymentError.of("OUTGOING_WEBHOOK_EVENT_LOGS_RETRIEVAL_FAILED",
+                "Failed to get outgoing webhook event logs: " + error.getMessage())));
+        });
+    }
+    
+    @Override
+    public Mono<Result<OutgoingWebhookEventLogsResponse, PaymentError>> getProfileOutgoingWebhookEventLogs(
+            String profileId,
+            OutgoingWebhookEventLogsRequest request) {
+        log.info("Getting profile outgoing webhook event logs for profile: {}", profileId);
+        
+        return Mono.fromCallable(() -> {
+            OutgoingWebhookEventLogsResponse response = new OutgoingWebhookEventLogsResponse();
+            response.setEvents(new ArrayList<>());
+            response.setTotalCount(0L);
+            
+            // In production, this would filter by profile ID
+            // For now, return empty response
+            
+            return Result.<OutgoingWebhookEventLogsResponse, PaymentError>ok(response);
+        })
+        .onErrorResume(error -> {
+            log.error("Error getting profile outgoing webhook event logs: {}", error.getMessage(), error);
+            return Mono.just(Result.err(PaymentError.of("PROFILE_OUTGOING_WEBHOOK_EVENT_LOGS_RETRIEVAL_FAILED",
+                "Failed to get profile outgoing webhook event logs: " + error.getMessage())));
+        });
+    }
+    
+    @Override
+    public Mono<Result<SankeyResponse, PaymentError>> getSankey(
+            String merchantId,
+            SankeyRequest request) {
+        log.info("Getting sankey diagram for merchant: {}", merchantId);
+        
+        return Mono.fromCallable(() -> {
+            SankeyResponse response = new SankeyResponse();
+            response.setQueryData(new ArrayList<>());
+            
+            // In production, this would query payment intent data and generate sankey flow
+            // For now, return empty response
+            
+            return Result.<SankeyResponse, PaymentError>ok(response);
+        })
+        .onErrorResume(error -> {
+            log.error("Error getting sankey diagram: {}", error.getMessage(), error);
+            return Mono.just(Result.err(PaymentError.of("SANKEY_RETRIEVAL_FAILED",
+                "Failed to get sankey diagram: " + error.getMessage())));
+        });
+    }
+    
+    @Override
+    public Mono<Result<SankeyResponse, PaymentError>> getMerchantSankey(
+            String merchantId,
+            SankeyRequest request) {
+        log.info("Getting merchant sankey diagram for merchant: {}", merchantId);
+        return getSankey(merchantId, request);
+    }
+    
+    @Override
+    public Mono<Result<SankeyResponse, PaymentError>> getOrgSankey(
+            String orgId,
+            SankeyRequest request) {
+        log.info("Getting org sankey diagram for org: {}", orgId);
+        
+        return Mono.fromCallable(() -> {
+            SankeyResponse response = new SankeyResponse();
+            response.setQueryData(new ArrayList<>());
+            
+            // In production, this would query payment intent data for all merchants in org
+            // For now, return empty response
+            
+            return Result.<SankeyResponse, PaymentError>ok(response);
+        })
+        .onErrorResume(error -> {
+            log.error("Error getting org sankey diagram: {}", error.getMessage(), error);
+            return Mono.just(Result.err(PaymentError.of("ORG_SANKEY_RETRIEVAL_FAILED",
+                "Failed to get org sankey diagram: " + error.getMessage())));
+        });
+    }
+    
+    @Override
+    public Mono<Result<SankeyResponse, PaymentError>> getProfileSankey(
+            String profileId,
+            SankeyRequest request) {
+        log.info("Getting profile sankey diagram for profile: {}", profileId);
+        
+        return Mono.fromCallable(() -> {
+            SankeyResponse response = new SankeyResponse();
+            response.setQueryData(new ArrayList<>());
+            
+            // In production, this would query payment intent data filtered by profile ID
+            // For now, return empty response
+            
+            return Result.<SankeyResponse, PaymentError>ok(response);
+        })
+        .onErrorResume(error -> {
+            log.error("Error getting profile sankey diagram: {}", error.getMessage(), error);
+            return Mono.just(Result.err(PaymentError.of("PROFILE_SANKEY_RETRIEVAL_FAILED",
+                "Failed to get profile sankey diagram: " + error.getMessage())));
+        });
+    }
+    
+    @Override
+    public Mono<Result<SankeyResponse, PaymentError>> getAuthEventSankey(
+            String merchantId,
+            SankeyRequest request) {
+        log.info("Getting auth event sankey diagram for merchant: {}", merchantId);
+        
+        return Mono.fromCallable(() -> {
+            SankeyResponse response = new SankeyResponse();
+            response.setQueryData(new ArrayList<>());
+            
+            // In production, this would query auth event data and generate sankey flow
+            // For now, return empty response
+            
+            return Result.<SankeyResponse, PaymentError>ok(response);
+        })
+        .onErrorResume(error -> {
+            log.error("Error getting auth event sankey diagram: {}", error.getMessage(), error);
+            return Mono.just(Result.err(PaymentError.of("AUTH_EVENT_SANKEY_RETRIEVAL_FAILED",
+                "Failed to get auth event sankey diagram: " + error.getMessage())));
+        });
+    }
+    
+    @Override
+    public Mono<Result<SankeyResponse, PaymentError>> getMerchantAuthEventSankey(
+            String merchantId,
+            SankeyRequest request) {
+        log.info("Getting merchant auth event sankey diagram for merchant: {}", merchantId);
+        return getAuthEventSankey(merchantId, request);
+    }
+    
+    @Override
+    public Mono<Result<SankeyResponse, PaymentError>> getOrgAuthEventSankey(
+            String orgId,
+            SankeyRequest request) {
+        log.info("Getting org auth event sankey diagram for org: {}", orgId);
+        
+        return Mono.fromCallable(() -> {
+            SankeyResponse response = new SankeyResponse();
+            response.setQueryData(new ArrayList<>());
+            
+            // In production, this would query auth event data for all merchants in org
+            // For now, return empty response
+            
+            return Result.<SankeyResponse, PaymentError>ok(response);
+        })
+        .onErrorResume(error -> {
+            log.error("Error getting org auth event sankey diagram: {}", error.getMessage(), error);
+            return Mono.just(Result.err(PaymentError.of("ORG_AUTH_EVENT_SANKEY_RETRIEVAL_FAILED",
+                "Failed to get org auth event sankey diagram: " + error.getMessage())));
+        });
+    }
+    
+    @Override
+    public Mono<Result<SankeyResponse, PaymentError>> getProfileAuthEventSankey(
+            String profileId,
+            SankeyRequest request) {
+        log.info("Getting profile auth event sankey diagram for profile: {}", profileId);
+        
+        return Mono.fromCallable(() -> {
+            SankeyResponse response = new SankeyResponse();
+            response.setQueryData(new ArrayList<>());
+            
+            // In production, this would query auth event data filtered by profile ID
+            // For now, return empty response
+            
+            return Result.<SankeyResponse, PaymentError>ok(response);
+        })
+        .onErrorResume(error -> {
+            log.error("Error getting profile auth event sankey diagram: {}", error.getMessage(), error);
+            return Mono.just(Result.err(PaymentError.of("PROFILE_AUTH_EVENT_SANKEY_RETRIEVAL_FAILED",
+                "Failed to get profile auth event sankey diagram: " + error.getMessage())));
         });
     }
 }
