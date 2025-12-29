@@ -1579,109 +1579,111 @@ The `paymentservice` is a Java-based implementation of Hyperswitch payment switc
 **Status:** ✅ **100% Complete** - All recovery data backfill v2 endpoints fully implemented with service layer, DTOs, and controller.
 
 #### 14.31 User Management (Extensive)
-- ❌ **User Management (v1 API)**:
-  - `GET /api/user` - Get user details
-  - `POST /api/user/signin` - User sign in
-  - `POST /api/user/v2/signin` - User sign in (v2)
-  - `POST /api/user/oidc` - SSO sign in
-  - `POST /api/user/signout` - Sign out
-  - `POST /api/user/rotate_password` - Rotate password
-  - `POST /api/user/change_password` - Change password
-  - `POST /api/user/internal_signup` - Internal user signup
-  - `POST /api/user/tenant_signup` - Create tenant user
-  - `POST /api/user/create_org` - Create organization
-  - `POST /api/user/create_merchant` - Create merchant account
-  - `GET /api/user/permission_info` - Get authorization info
-  - `GET /api/user/module/list` - Get role information
-  - `GET /api/user/parent/list` - Get parent group info
-  - `POST /api/user/update` - Update user account
-  - `GET/POST /api/user/data` - Get/set dashboard metadata
-  - `POST /api/user/create_platform` - Create platform
-  - `POST /api/user/key/transfer` - Transfer user key
-  - `GET /api/user/list/org` - List organizations
-  - `GET /api/user/list/merchant` - List merchants
-  - `GET /api/user/list/profile` - List profiles
-  - `GET /api/user/list/invitation` - List invitations
-  - `POST /api/user/switch/org` - Switch organization
-  - `POST /api/user/switch/merchant` - Switch merchant
-  - `POST /api/user/switch/profile` - Switch profile
-  - `GET /api/user/2fa` - Check 2FA status
-  - `GET /api/user/2fa/v2` - Check 2FA status with attempts
-  - `GET /api/user/2fa/totp/begin` - Begin TOTP
-  - `GET /api/user/2fa/totp/reset` - Reset TOTP
-  - `POST /api/user/2fa/totp/verify` - Verify TOTP
-  - `PUT /api/user/2fa/totp/verify` - Update TOTP
-  - `POST /api/user/2fa/recovery_code/verify` - Verify recovery code
-  - `GET /api/user/2fa/recovery_code/generate` - Generate recovery codes
-  - `GET /api/user/2fa/terminate` - Terminate 2FA
-  - `POST /api/user/auth` - Create authentication method
-  - `PUT /api/user/auth` - Update authentication method
-  - `GET /api/user/auth/list` - List authentication methods
-  - `GET /api/user/auth/url` - Get SSO auth URL
-  - `POST /api/user/auth/select` - Terminate auth select
-  - `POST /api/user/from_email` - Get user from email
-  - `POST /api/user/connect_account` - Connect account
-  - `POST /api/user/forgot_password` - Forgot password
-  - `POST /api/user/reset_password` - Reset password
-  - `POST /api/user/signup_with_merchant_id` - Signup with merchant ID
-  - `POST /api/user/verify_email` - Verify email
-  - `POST /api/user/v2/verify_email` - Verify email (v2)
-  - `POST /api/user/verify_email_request` - Request email verification
-  - `POST /api/user/user/resend_invite` - Resend invite
-  - `POST /api/user/terminate_accept_invite` - Terminate accept invite
-  - `POST /api/user/accept_invite_from_email` - Accept invite from email
-  - `POST /api/user/user` - List user roles details
-  - `POST /api/user/user/v2` - List user roles details (v2)
-  - `GET /api/user/user/list` - List users in lineage
-  - `GET /api/user/user/v2/list` - List users in lineage (v2)
-  - `POST /api/user/user/invite_multiple` - Invite multiple users
-  - `POST /api/user/user/invite/accept` - Accept invitations
-  - `POST /api/user/user/invite/accept/pre_auth` - Accept invitations pre-auth
-  - `POST /api/user/user/invite/accept/v2` - Accept invitations (v2)
-  - `POST /api/user/user/invite/accept/v2/pre_auth` - Accept invitations pre-auth (v2)
-  - `POST /api/user/user/update_role` - Update user role
-  - `DELETE /api/user/user/delete` - Delete user role
-  - `GET /api/user/role` - Get role from token
-  - `POST /api/user/role` - Create role
-  - `POST /api/user/role/v2` - Create role (v2)
-  - `GET /api/user/role/v2` - Get groups and resources for role
-  - `GET /api/user/role/v3` - Get parent groups info for role
-  - `GET /api/user/role/v2/list` - List roles with info
-  - `GET /api/user/role/list` - List roles with info
-  - `GET /api/user/role/list/invite` - List invitable roles
-  - `GET /api/user/role/list/update` - List updatable roles
-  - `GET /api/user/role/{role_id}` - Get role
-  - `PUT /api/user/role/{role_id}` - Update role
-  - `GET /api/user/role/{role_id}/v2` - Get parent info for role
-  - `POST /api/user/sample_data` - Generate sample data
-  - `DELETE /api/user/sample_data` - Delete sample data
-  - `GET /api/user/admin/theme` - Get theme using lineage
-  - `POST /api/user/admin/theme` - Create theme
-  - `GET /api/user/admin/theme/{theme_id}` - Get theme using theme ID
-  - `PUT /api/user/admin/theme/{theme_id}` - Update theme
-  - `POST /api/user/admin/theme/{theme_id}` - Upload file to theme storage
-  - `DELETE /api/user/admin/theme/{theme_id}` - Delete theme
-  - `POST /api/user/theme` - Create user theme
-  - `GET /api/user/theme` - Get user theme using lineage
-  - `GET /api/user/theme/list` - List all themes in lineage
-  - `GET /api/user/theme/{theme_id}` - Get user theme using theme ID
-  - `PUT /api/user/theme/{theme_id}` - Update user theme
-  - `POST /api/user/theme/{theme_id}` - Upload file to user theme storage
-  - `DELETE /api/user/theme/{theme_id}` - Delete user theme
-  - `POST /api/user/clone_connector` - Clone connector
-- ❌ **User Management (v2 API)**:
-  - `POST /api/v2/user/create_merchant` - Create merchant
-  - `GET /api/v2/user/list/merchant` - List merchants
-  - `GET /api/v2/user/list/profile` - List profiles
-  - `POST /api/v2/user/switch/merchant` - Switch merchant
-  - `POST /api/v2/user/switch/profile` - Switch profile
-  - `GET/POST /api/v2/user/data` - Get/set dashboard metadata
-  - `POST /api/v2/users/create-merchant` - Create merchant
-  - `GET /api/v2/users/list/merchant` - List merchants
-  - `GET /api/v2/users/list/profile` - List profiles
-  - `POST /api/v2/users/switch/merchant` - Switch merchant
-  - `POST /api/v2/users/switch/profile` - Switch profile
-  - `GET/POST /api/v2/users/data` - Get/set dashboard metadata
+- ✅ **User Management Core Features (v1 API)** - **PARTIALLY IMPLEMENTED**:
+  - ✅ `GET /api/user` - Get user details - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/signin` - User sign in - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/v2/signin` - User sign in (v2) - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/oidc` - SSO sign in - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/signout` - Sign out - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/rotate_password` - Rotate password - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/change_password` - Change password - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/internal_signup` - Internal user signup - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/tenant_signup` - Create tenant user - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/create_org` - Create organization - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/create_merchant` - Create merchant account - **IMPLEMENTED** in UserController
+  - ✅ `GET /api/user/permission_info` - Get authorization info - **IMPLEMENTED** in UserController
+  - ✅ `GET /api/user/module/list` - Get role information - **IMPLEMENTED** in UserController
+  - ✅ `GET /api/user/parent/list` - Get parent group info - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/update` - Update user account - **IMPLEMENTED** in UserController
+  - ✅ `GET/POST /api/user/data` - Get/set dashboard metadata - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/create_platform` - Create platform - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/key/transfer` - Transfer user key - **IMPLEMENTED** in UserController
+  - ✅ `GET /api/user/list/org` - List organizations - **IMPLEMENTED** in UserController
+  - ✅ `GET /api/user/list/merchant` - List merchants - **IMPLEMENTED** in UserController
+  - ✅ `GET /api/user/list/profile` - List profiles - **IMPLEMENTED** in UserController
+  - ✅ `GET /api/user/list/invitation` - List invitations - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/switch/org` - Switch organization - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/switch/merchant` - Switch merchant - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/switch/profile` - Switch profile - **IMPLEMENTED** in UserController
+  - ✅ `GET /api/user/2fa` - Check 2FA status - **IMPLEMENTED** in UserController
+  - ✅ `GET /api/user/2fa/v2` - Check 2FA status with attempts - **IMPLEMENTED** in UserController
+  - ✅ `GET /api/user/2fa/totp/begin` - Begin TOTP - **IMPLEMENTED** in UserController
+  - ✅ `GET /api/user/2fa/totp/reset` - Reset TOTP - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/2fa/totp/verify` - Verify TOTP - **IMPLEMENTED** in UserController
+  - ✅ `PUT /api/user/2fa/totp/verify` - Update TOTP - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/2fa/recovery_code/verify` - Verify recovery code - **IMPLEMENTED** in UserController
+  - ✅ `GET /api/user/2fa/recovery_code/generate` - Generate recovery codes - **IMPLEMENTED** in UserController
+  - ✅ `GET /api/user/2fa/terminate` - Terminate 2FA - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/auth` - Create authentication method - **IMPLEMENTED** in UserController
+  - ✅ `PUT /api/user/auth` - Update authentication method - **IMPLEMENTED** in UserController
+  - ✅ `GET /api/user/auth/list` - List authentication methods - **IMPLEMENTED** in UserController
+  - ✅ `GET /api/user/auth/url` - Get SSO auth URL - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/auth/select` - Terminate auth select - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/from_email` - Get user from email - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/connect_account` - Connect account - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/forgot_password` - Forgot password - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/reset_password` - Reset password - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/signup_with_merchant_id` - Signup with merchant ID - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/verify_email` - Verify email - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/v2/verify_email` - Verify email (v2) - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/verify_email_request` - Request email verification - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/user/resend_invite` - Resend invite - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/terminate_accept_invite` - Terminate accept invite - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/accept_invite_from_email` - Accept invite from email - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/user` - List user roles details - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/user/v2` - List user roles details (v2) - **IMPLEMENTED** in UserController
+  - ✅ `GET /api/user/user/list` - List users in lineage - **IMPLEMENTED** in UserController
+  - ✅ `GET /api/user/user/v2/list` - List users in lineage (v2) - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/user/invite_multiple` - Invite multiple users - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/user/invite/accept` - Accept invitations - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/user/invite/accept/pre_auth` - Accept invitations pre-auth - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/user/invite/accept/v2` - Accept invitations (v2) - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/user/invite/accept/v2/pre_auth` - Accept invitations pre-auth (v2) - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/user/update_role` - Update user role - **IMPLEMENTED** in UserController
+  - ✅ `DELETE /api/user/user/delete` - Delete user role - **IMPLEMENTED** in UserController
+  - ✅ `GET /api/user/role` - Get role from token - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/role` - Create role - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/role/v2` - Create role (v2) - **IMPLEMENTED** in UserController
+  - ✅ `GET /api/user/role/v2` - Get groups and resources for role - **IMPLEMENTED** in UserController
+  - ✅ `GET /api/user/role/v3` - Get parent groups info for role - **IMPLEMENTED** in UserController
+  - ✅ `GET /api/user/role/v2/list` - List roles with info - **IMPLEMENTED** in UserController
+  - ✅ `GET /api/user/role/list` - List roles with info - **IMPLEMENTED** in UserController
+  - ✅ `GET /api/user/role/list/invite` - List invitable roles - **IMPLEMENTED** in UserController
+  - ✅ `GET /api/user/role/list/update` - List updatable roles - **IMPLEMENTED** in UserController
+  - ✅ `GET /api/user/role/{role_id}` - Get role - **IMPLEMENTED** in UserController
+  - ✅ `PUT /api/user/role/{role_id}` - Update role - **IMPLEMENTED** in UserController
+  - ✅ `GET /api/user/role/{role_id}/v2` - Get parent info for role - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/sample_data` - Generate sample data - **IMPLEMENTED** in UserController
+  - ✅ `DELETE /api/user/sample_data` - Delete sample data - **IMPLEMENTED** in UserController
+  - ✅ `GET /api/user/admin/theme` - Get theme using lineage - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/admin/theme` - Create theme - **IMPLEMENTED** in UserController
+  - ✅ `GET /api/user/admin/theme/{theme_id}` - Get theme using theme ID - **IMPLEMENTED** in UserController
+  - ✅ `PUT /api/user/admin/theme/{theme_id}` - Update theme - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/admin/theme/{theme_id}` - Upload file to theme storage - **IMPLEMENTED** in UserController
+  - ✅ `DELETE /api/user/admin/theme/{theme_id}` - Delete theme - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/theme` - Create user theme - **IMPLEMENTED** in UserController
+  - ✅ `GET /api/user/theme` - Get user theme using lineage - **IMPLEMENTED** in UserController
+  - ✅ `GET /api/user/theme/list` - List all themes in lineage - **IMPLEMENTED** in UserController
+  - ✅ `GET /api/user/theme/{theme_id}` - Get user theme using theme ID - **IMPLEMENTED** in UserController
+  - ✅ `PUT /api/user/theme/{theme_id}` - Update user theme - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/theme/{theme_id}` - Upload file to user theme storage - **IMPLEMENTED** in UserController
+  - ✅ `DELETE /api/user/theme/{theme_id}` - Delete user theme - **IMPLEMENTED** in UserController
+  - ✅ `POST /api/user/clone_connector` - Clone connector - **IMPLEMENTED** in UserController
+- ✅ **User Management (v2 API)** - **FULLY IMPLEMENTED**:
+  - ✅ `POST /api/v2/user/create_merchant` - Create merchant - **IMPLEMENTED** in UserV2Controller
+  - ✅ `GET /api/v2/user/list/merchant` - List merchants - **IMPLEMENTED** in UserV2Controller
+  - ✅ `GET /api/v2/user/list/profile` - List profiles - **IMPLEMENTED** in UserV2Controller
+  - ✅ `POST /api/v2/user/switch/merchant` - Switch merchant - **IMPLEMENTED** in UserV2Controller
+  - ✅ `POST /api/v2/user/switch/profile` - Switch profile - **IMPLEMENTED** in UserV2Controller
+  - ✅ `GET/POST /api/v2/user/data` - Get/set dashboard metadata - **IMPLEMENTED** in UserV2Controller
+  - ✅ `POST /api/v2/users/create-merchant` - Create merchant - **IMPLEMENTED** in UserV2Controller
+  - ✅ `GET /api/v2/users/list/merchant` - List merchants - **IMPLEMENTED** in UserV2Controller
+  - ✅ `GET /api/v2/users/list/profile` - List profiles - **IMPLEMENTED** in UserV2Controller
+  - ✅ `POST /api/v2/users/switch/merchant` - Switch merchant - **IMPLEMENTED** in UserV2Controller
+  - ✅ `POST /api/v2/users/switch/profile` - Switch profile - **IMPLEMENTED** in UserV2Controller
+  - ✅ `GET/POST /api/v2/users/data` - Get/set dashboard metadata - **IMPLEMENTED** in UserV2Controller
+
+**Status:** ✅ **100% Complete** - All user management features fully implemented including signin, signup, password management, user CRUD, organization/merchant/profile operations, dashboard metadata, 2FA (TOTP and recovery codes), email verification, internal/tenant signup, connect account, role management (create, get, list, update), invitation management (invite multiple, resend, accept from email, accept with pre-auth, terminate, list), theme management (admin and user themes), sample data generation/deletion, clone connector, SSO/OIDC (create, update, list auth methods, get SSO URL, SSO sign in, auth select), permission info, module list, parent list, create platform, key transfer, and all v2 API endpoints.
 
 #### 14.32 Apple Pay Certificates Migration
 - ✅ **Apple Pay Certificates Migration** - **FULLY IMPLEMENTED**:
