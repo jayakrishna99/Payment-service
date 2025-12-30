@@ -38,5 +38,11 @@ public interface ConnectorAccountService {
      */
     reactor.core.publisher.Mono<com.hyperswitch.common.types.Result<reactor.core.publisher.Flux<ConnectorAccountResponse>, PaymentError>> 
         listConnectorAccountsForProfile(String merchantId, String profileId);
+    
+    /**
+     * List connector accounts for a merchant account (admin)
+     */
+    reactor.core.publisher.Mono<com.hyperswitch.common.types.Result<reactor.core.publisher.Flux<ConnectorAccountResponse>, PaymentError>> 
+        listConnectorAccountsForMerchantAccount(String merchantId);
 }
 

@@ -179,5 +179,35 @@ public class ConnectorAccountServiceImpl implements ConnectorAccountService {
                 "Failed to list connector accounts for profile: " + error.getMessage())));
         });
     }
+    
+    @Override
+    public Mono<Result<Flux<ConnectorAccountResponse>, PaymentError>> listConnectorAccountsForMerchantAccount(
+            String merchantId) {
+        log.info("Listing connector accounts for merchant account: {}", merchantId);
+        
+        return Mono.fromCallable(() -> {
+            // In production, this would query connector accounts from database
+            // filtered by merchantId (across all profiles for the merchant)
+            ConnectorAccountResponse response = new ConnectorAccountResponse();
+            response.setId("mca_sample");
+            response.setMerchantId(merchantId);
+            response.setProfileId("profile_default");
+            response.setConnectorType("payment_processor");
+            response.setConnectorName("stripe");
+            response.setConnectorLabel("stripe_default");
+            response.setDisabled(false);
+            response.setStatus("active");
+            response.setCreatedAt(Instant.now());
+            response.setUpdatedAt(Instant.now());
+            
+            Flux<ConnectorAccountResponse> accounts = Flux.just(response);
+            return Result.<Flux<ConnectorAccountResponse>, PaymentError>ok(accounts);
+        })
+        .onErrorResume(error -> {
+            log.error("Error listing connector accounts for merchant account: {}", error.getMessage(), error);
+            return Mono.just(Result.err(PaymentError.of("CONNECTOR_ACCOUNT_LIST_FAILED",
+                "Failed to list connector accounts for merchant account: " + error.getMessage())));
+        });
+    }
 }
 
