@@ -1915,7 +1915,7 @@ public class PaymentServiceImpl implements PaymentService {
                     intent.getPaymentId(), attempt.getConnector(), success))
                 .doOnError(error -> log.warn("Failed to record payment attempt for analytics", error))
                 .then();
-        } catch (IllegalArgumentException _) {
+        } catch (IllegalArgumentException e) {
             log.warn("Invalid connector name for analytics: {}", attempt.getConnector());
             return Mono.empty();
         }
@@ -2756,7 +2756,7 @@ public class PaymentServiceImpl implements PaymentService {
             try {
                 builder.captureMethod(com.hyperswitch.common.enums.CaptureMethod.valueOf(
                     request.getCaptureMethod().toUpperCase()));
-            } catch (IllegalArgumentException _) {
+            } catch (IllegalArgumentException e) {
                 // Invalid capture method, will use default
             }
         }

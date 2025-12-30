@@ -54,7 +54,7 @@ public class RevenueRecoveryServiceImpl implements RevenueRecoveryService {
     @Autowired
     public RevenueRecoveryServiceImpl(
             RevenueRecoveryRepository revenueRecoveryRepository,
-            SchedulerService schedulerService) {
+            @org.springframework.context.annotation.Lazy SchedulerService schedulerService) {
         this.revenueRecoveryRepository = revenueRecoveryRepository;
         this.schedulerService = schedulerService;
     }

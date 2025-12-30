@@ -4,9 +4,9 @@ spring:
   
   # Reactive Database Configuration (PostgreSQL)
   r2dbc:
-    url: r2dbc:postgresql://localhost:5432/hyperswitch_db
-    username: db_user
-    password: db_pass
+    url: r2dbc:postgresql://172.20.23.76:5432/hyperswitch_db
+    username: paymentadmin
+    password: paymentAdmin
     pool:
       initial-size: 5
       max-size: 20

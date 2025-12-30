@@ -63,7 +63,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
             SubscriptionRepository subscriptionRepository,
             ObjectMapper objectMapper,
             PaymentService paymentService,
-            SchedulerService schedulerService) {
+            @org.springframework.context.annotation.Lazy SchedulerService schedulerService) {
         this.subscriptionRepository = subscriptionRepository;
         this.objectMapper = objectMapper;
         this.paymentService = paymentService;
