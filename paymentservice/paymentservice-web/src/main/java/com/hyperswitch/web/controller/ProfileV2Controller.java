@@ -2,7 +2,10 @@ package com.hyperswitch.web.controller;
 
 import com.hyperswitch.common.dto.ProfileRequest;
 import com.hyperswitch.common.dto.ProfileResponse;
+import com.hyperswitch.common.dto.ConnectorAccountResponse;
 import com.hyperswitch.core.profiles.ProfileService;
+import com.hyperswitch.core.connectoraccount.ConnectorAccountService;
+import reactor.core.publisher.Flux;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -25,10 +28,12 @@ import java.util.Map;
 public class ProfileV2Controller {
     
     private final ProfileService profileService;
+    private final ConnectorAccountService connectorAccountService;
     
     @Autowired
-    public ProfileV2Controller(ProfileService profileService) {
+    public ProfileV2Controller(ProfileService profileService, ConnectorAccountService connectorAccountService) {
         this.profileService = profileService;
+        this.connectorAccountService = connectorAccountService;
     }
     
     /**
@@ -322,6 +327,36 @@ public class ProfileV2Controller {
             @RequestHeader("merchant_id") String merchantId,
             @PathVariable("profile_id") String profileId) {
         return profileService.getDecisionManagerConfig(merchantId, profileId)
+            .map(result -> {
+                if (result.isOk()) {
+                    return ResponseEntity.ok(result.unwrap());
+                } else {
+                    throw new PaymentException(result.unwrapErr());
+                }
+            });
+    }
+    
+    /**
+     * List connector accounts for profile (v2 API)
+     * GET /api/v2/profiles/{profile_id}/connector-accounts
+     */
+    @GetMapping("/{profile_id}/connector-accounts")
+    @Operation(
+        summary = "List connector accounts for profile",
+        description = "Retrieves all connector accounts associated with a specific profile"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Connector accounts retrieved successfully",
+            content = @Content(schema = @Schema(implementation = ConnectorAccountResponse.class))
+        ),
+        @ApiResponse(responseCode = "404", description = "Profile not found")
+    })
+    public Mono<ResponseEntity<Flux<ConnectorAccountResponse>>> listConnectorAccounts(
+            @RequestHeader("merchant_id") String merchantId,
+            @PathVariable("profile_id") String profileId) {
+        return connectorAccountService.listConnectorAccountsForProfile(merchantId, profileId)
             .map(result -> {
                 if (result.isOk()) {
                     return ResponseEntity.ok(result.unwrap());

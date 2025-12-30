@@ -32,5 +32,17 @@ public interface ConnectorAccountService {
      * Delete connector account
      */
     Mono<Result<ConnectorAccountDeleteResponse, PaymentError>> deleteConnectorAccount(String id);
+    
+    /**
+     * List connector accounts for a profile
+     */
+    reactor.core.publisher.Mono<com.hyperswitch.common.types.Result<reactor.core.publisher.Flux<ConnectorAccountResponse>, PaymentError>> 
+        listConnectorAccountsForProfile(String merchantId, String profileId);
+    
+    /**
+     * List connector accounts for a merchant account (admin)
+     */
+    reactor.core.publisher.Mono<com.hyperswitch.common.types.Result<reactor.core.publisher.Flux<ConnectorAccountResponse>, PaymentError>> 
+        listConnectorAccountsForMerchantAccount(String merchantId);
 }
 

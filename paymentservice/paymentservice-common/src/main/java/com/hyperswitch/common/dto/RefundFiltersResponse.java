@@ -1,40 +1,50 @@
 package com.hyperswitch.common.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /**
- * Response for available refund filters
+ * Response DTO for refund filters
  */
 public class RefundFiltersResponse {
-    private List<String> connector;
-    private List<String> currency;
-    private List<String> status;
     
-    public RefundFiltersResponse() {
+    @JsonProperty("query_data")
+    private List<FilterValue> queryData;
+    
+    // Getters and Setters
+    public List<FilterValue> getQueryData() {
+        return queryData;
     }
     
-    public List<String> getConnector() {
-        return connector;
+    public void setQueryData(List<FilterValue> queryData) {
+        this.queryData = queryData;
     }
     
-    public void setConnector(List<String> connector) {
-        this.connector = connector;
-    }
-    
-    public List<String> getCurrency() {
-        return currency;
-    }
-    
-    public void setCurrency(List<String> currency) {
-        this.currency = currency;
-    }
-    
-    public List<String> getStatus() {
-        return status;
-    }
-    
-    public void setStatus(List<String> status) {
-        this.status = status;
+    /**
+     * Filter value containing dimension and values
+     */
+    public static class FilterValue {
+        @JsonProperty("dimension")
+        private String dimension;
+        
+        @JsonProperty("values")
+        private List<String> values;
+        
+        // Getters and Setters
+        public String getDimension() {
+            return dimension;
+        }
+        
+        public void setDimension(String dimension) {
+            this.dimension = dimension;
+        }
+        
+        public List<String> getValues() {
+            return values;
+        }
+        
+        public void setValues(List<String> values) {
+            this.values = values;
+        }
     }
 }
-

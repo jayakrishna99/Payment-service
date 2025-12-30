@@ -1,6 +1,7 @@
 package com.hyperswitch.web.controller;
 
 import com.hyperswitch.common.dto.*;
+import com.hyperswitch.core.connectoraccount.ConnectorAccountService;
 import com.hyperswitch.core.merchantaccount.MerchantAccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -23,10 +24,14 @@ import reactor.core.publisher.Mono;
 public class MerchantAccountV2Controller {
     
     private final MerchantAccountService merchantAccountService;
+    private final ConnectorAccountService connectorAccountService;
     
     @Autowired
-    public MerchantAccountV2Controller(MerchantAccountService merchantAccountService) {
+    public MerchantAccountV2Controller(
+            MerchantAccountService merchantAccountService,
+            ConnectorAccountService connectorAccountService) {
         this.merchantAccountService = merchantAccountService;
+        this.connectorAccountService = connectorAccountService;
     }
     
     /**
@@ -195,6 +200,35 @@ public class MerchantAccountV2Controller {
     public Mono<ResponseEntity<ToggleKVResponse>> getKVStatus(
             @PathVariable("id") String id) {
         return merchantAccountService.getKVStatus(id)
+            .map(result -> {
+                if (result.isOk()) {
+                    return ResponseEntity.ok(result.unwrap());
+                } else {
+                    throw new PaymentException(result.unwrapErr());
+                }
+            });
+    }
+    
+    /**
+     * List connector accounts for merchant account (admin)
+     * GET /api/v2/merchant-accounts/{id}/connector-accounts
+     */
+    @GetMapping("/{id}/connector-accounts")
+    @Operation(
+        summary = "List connector accounts for merchant account",
+        description = "Lists all connector accounts associated with a merchant account (admin endpoint)"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Connector accounts retrieved successfully",
+            content = @Content(schema = @Schema(implementation = ConnectorAccountResponse.class))
+        ),
+        @ApiResponse(responseCode = "404", description = "Merchant account not found")
+    })
+    public Mono<ResponseEntity<Flux<ConnectorAccountResponse>>> listConnectorAccounts(
+            @PathVariable("id") String merchantId) {
+        return connectorAccountService.listConnectorAccountsForMerchantAccount(merchantId)
             .map(result -> {
                 if (result.isOk()) {
                     return ResponseEntity.ok(result.unwrap());
